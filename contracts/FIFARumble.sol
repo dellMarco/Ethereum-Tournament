@@ -36,7 +36,7 @@ contract FIFARumble {
     event TournamentFull(uint mP);
     event TooManyPlayers(uint nOM); 
    
-    //fee in ETH
+    //fee in wei
     function createTournament(uint _fee, uint _maxPlayers, string _tournamentName) external gameMasterOnly {
         registrationOpen = true;
         fee = _fee;
