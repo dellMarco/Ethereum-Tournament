@@ -7,7 +7,7 @@
     "test": "test"
   },
   "dependencies": {
-    "web3": "github:ethereum/web3.js"
+    "web3": "5.6.0"
   },
   "devDependencies": {},
   "scripts": {
