@@ -1,0 +1,73 @@
+:root {
+  --color-co-primary: rgb(0, 0, 65);
+  --color-co-yellow: rgb(237, 181, 18);
+}
+
+body {
+  background-color: #F0F0F0;
+  padding: 0;
+  margin: 0;
+  font-family: 'Mina', sans-serif;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+button {
+  font-family: 'Mina', sans-serif;
+  font-size: 1em;
+  margin: 0.5em 0;
+  padding: 0.1em 0.2em;
+  display: block;
+}
+
+header {
+  position: relative;
+  top: 0;
+  left: 0;
+  padding: 10px 20px;
+  background-color: white;
+  color: var(--color-co-primary);
+  font-weight: bold;
+  font-size: 25px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+input {
+  font-family: 'Mina', sans-serif;
+  display: block;
+  padding: 5px;
+  width: 90%;
+  margin-bottom: 1em;
+}
+
+.ui-icon {
+  -ms-transform: scale(1.5);
+  /* IE 9 */
+  -webkit-transform: scale(1.5);
+  /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.txt-rotate>.wrap {
+  border-right: 0.08em solid #666
+}
+
+#contentBox {
+  padding: 1em;
+  background-color: #fff;
+  margin: 1em 0;
+}
