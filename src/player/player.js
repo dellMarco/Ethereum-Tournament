@@ -84,7 +84,7 @@ $(document).ready(function () {
         valid = valid && checkLength(club, "Verein", 3);
 
         if (valid) {
-            //success function (register)
+            FIFA.register(name, club)
             dialog.dialog("close");
         }
         return valid;

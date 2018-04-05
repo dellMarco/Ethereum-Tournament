@@ -8,7 +8,7 @@ $(document).ready(function () {
     loadData();
 
     $("#decideMatch").on("click", function () {
-
+        window.location ="gamePlan.html"
     });
 
     $("#start").on("click", function () {
@@ -26,9 +26,7 @@ $(document).ready(function () {
 
     });
 
-    $("#endTournament").on("click", function () {
 
-    });
 
     $("#reset").on("click", function () {
         resetCookie();
@@ -89,7 +87,7 @@ $(document).ready(function () {
                     handle2.text($('#slider2').slider("value"));
                     document.getElementById("start").disabled = true;
                     document.getElementById("decideMatch").disabled = false;
-                    document.getElementById("endTournament").disabled = false;
+
                     document.getElementById("name").disabled = true;
                     document.getElementById("fee").disabled = true;
                     document.getElementById("fee2").disabled = true;
@@ -102,7 +100,7 @@ $(document).ready(function () {
                     }
                 } else {
                     document.getElementById("decideMatch").disabled = true;
-                    document.getElementById("endTournament").disabled = true;
+   
                     $('#slider2').hide();
                 }
             }
