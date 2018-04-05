@@ -287,6 +287,7 @@ const cmcData = JSON.parse(Get('https://api.coinmarketcap.com/v1/ticker/ethereum
 
 $(document).ready(function () {
 
+    
     $("#player").on("click", function () {
         window.location = "src/player/index.html"
     });
