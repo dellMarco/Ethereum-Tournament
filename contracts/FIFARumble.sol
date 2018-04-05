@@ -84,7 +84,7 @@ contract FIFARumble {
             
             gamePlan[0][i - 1] = i;
             gamePlan[1][i - 1] = p1Temp;
-            gamePlan[2][i - 1] = p2Temp;            
+            gamePlan[2][i - 1] = p2Temp;           
 
             if (i % nOP == 0 && i > 1) {
                 modRound ++;

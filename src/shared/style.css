@@ -65,9 +65,3 @@ footer {
 .txt-rotate>.wrap {
   border-right: 0.08em solid #666
 }
-
-#contentBox {
-  padding: 1em;
-  background-color: #fff;
-  margin: 1em 0;
-}
