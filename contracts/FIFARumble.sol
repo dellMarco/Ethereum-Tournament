@@ -51,10 +51,6 @@ contract FIFARumble {
         gamePlan = getRoundRobin();
     }
 
-    // function endTournament() public {
-
-    // }
-
     function getTournament() external view returns (string, uint, uint, uint) {
         uint i = getPlayerCount();
         return (tournamentName, fee, maxPlayers, i);
