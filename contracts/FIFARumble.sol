@@ -201,7 +201,7 @@ contract FIFARumble {
 
     function FIFARumble() public {
         gameMaster = msg.sender;
-    }
+    } 
 
     function() public {
         revert();
