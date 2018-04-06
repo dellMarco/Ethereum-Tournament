@@ -7,8 +7,9 @@ $(document).ready(function () {
 
     loadData();
 
-    $("#decideMatch").on("click", function () {
-        window.location ="gamePlan.html"
+    $("#rumble").on("click", function () {
+        FIFA.startTournament();
+        //window.location ="gamePlan.html"
     });
 
     $("#start").on("click", function () {
@@ -86,7 +87,7 @@ $(document).ready(function () {
                     handle.text($('#slider').slider("value"));
                     handle2.text($('#slider2').slider("value"));
                     document.getElementById("start").disabled = true;
-                    document.getElementById("decideMatch").disabled = false;
+                    document.getElementById("rumble").disabled = false;
 
                     document.getElementById("name").disabled = true;
                     document.getElementById("fee").disabled = true;
@@ -99,7 +100,7 @@ $(document).ready(function () {
                         $("#tournamentCount").html(parsed[3] + " von " + parsed[2] + " Plätzen belegt!");
                     }
                 } else {
-                    document.getElementById("decideMatch").disabled = true;
+                    document.getElementById("rumble").disabled = true;
    
                     $('#slider2').hide();
                 }

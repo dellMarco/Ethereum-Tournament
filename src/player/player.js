@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
 
-    const fee = [];
+    var fee = null;
 
     // if (typeof web3 !== 'undefined') {
     //     web3 = new Web3(web3.currentProvider);
@@ -16,9 +16,11 @@ $(document).ready(function () {
         if (!error) {
             if (result[0] != "") {
                 document.getElementById("opener").disabled = false;
-
+                fee = result[1];
+                rotate();
                 $("#tournament").html(result[0]);
-                if (result[3] == result[2]) {
+
+                if (parseInt(result[3]) === parseInt(result[2])) {
                     $("#tournamentCount").html("Alle " + result[2] + " Plätze sind belegt!");
                     document.getElementById("opener").disabled = true;
                 } else {
@@ -84,9 +86,18 @@ $(document).ready(function () {
         valid = valid && checkLength(club, "Verein", 3);
 
         if (valid) {
-            FIFA.register(name, club)
+            FIFA.register(toString(name), toString(club), { from: web3.eth.accounts[1], value: '2000000000000000000', gas: 500000 })
+
+            // if (FIFA.register(name, club)) {
+            //     alert("Success")
+            // } else {
+            //     alert("fail")
+            // }
+
             dialog.dialog("close");
+            //windows.location = "../gameMaster/gamePlan.html";
         }
+
         return valid;
     }
 
@@ -117,87 +128,78 @@ $(document).ready(function () {
     });
 
 
-    //Get CMC Data
-    function Get(yourUrl) {
-        const Httpreq = new XMLHttpRequest(); // a new request
-        Httpreq.open("GET", yourUrl, false);
-        Httpreq.send(null);
-        return Httpreq.responseText;
-    }
-
-    const cmcData = JSON.parse(Get('https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=EUR'));
 
     /* Rotate Text stuff */
+    function rotate() {
+        const TxtRotate = function (el, prices, period) {
 
-    const TxtRotate = function (el, prices, period) {
-        const result = FIFA.getTournament();
 
-        for (let index = 0; index < 4; index++) {
-            switch (index) {
-                case 0:
-                    prices[0] = (result[1] / 1000000000000000000 * cmcData[0].price_eur).toFixed(2) + " €.";
-                    break;
-                case 1:
-                    prices.push((result[1] / 1000000000000000000 * cmcData[0].price_usd).toFixed(2) + " $.");
-                    break;
-                case 2:
-                    prices.push((result[1] / 1000000000000000000).toFixed(2) + " ETH.");
-                    break;
-                case 3:
-                    prices.push(result[1] + " Wei.");
-                    break;
-                default:
+            for (let index = 0; index < 4; index++) {
+                switch (index) {
+                    case 0:
+                        prices[0] = (fee / 1000000000000000000 * cmcData[0].price_eur).toFixed(2) + " €.";
+                        break;
+                    case 1:
+                        prices.push((fee / 1000000000000000000 * cmcData[0].price_usd).toFixed(2) + " $.");
+                        break;
+                    case 2:
+                        prices.push((fee / 1000000000000000000).toFixed(2) + " ETH.");
+                        break;
+                    case 3:
+                        prices.push(fee + " Wei.");
+                        break;
+                    default:
 
+                }
+            }
+            this.prices = prices;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 1500;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtRotate.prototype.tick = function () {
+            var i = this.loopNum % this.prices.length;
+            var fullTxt = this.prices[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 300 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        var elements = document.getElementsByClassName('txt-rotate');
+        for (var i = 0; i < elements.length; i++) {
+            var prices = elements[i].getAttribute('data-rotate');
+            var period = elements[i].getAttribute('data-period');
+            if (prices) {
+                new TxtRotate(elements[i], JSON.parse(prices), period);
             }
         }
-        this.prices = prices;
-        this.el = el;
-        this.loopNum = 0;
-        this.period = parseInt(period, 10) || 1500;
-        this.txt = '';
-        this.tick();
-        this.isDeleting = false;
-    };
-
-    TxtRotate.prototype.tick = function () {
-        var i = this.loopNum % this.prices.length;
-        var fullTxt = this.prices[i];
-
-        if (this.isDeleting) {
-            this.txt = fullTxt.substring(0, this.txt.length - 1);
-        } else {
-            this.txt = fullTxt.substring(0, this.txt.length + 1);
-        }
-
-        this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-        var that = this;
-        var delta = 300 - Math.random() * 100;
-
-        if (this.isDeleting) { delta /= 2; }
-
-        if (!this.isDeleting && this.txt === fullTxt) {
-            delta = this.period;
-            this.isDeleting = true;
-        } else if (this.isDeleting && this.txt === '') {
-            this.isDeleting = false;
-            this.loopNum++;
-            delta = 500;
-        }
-
-        setTimeout(function () {
-            that.tick();
-        }, delta);
-    };
-
-    var elements = document.getElementsByClassName('txt-rotate');
-    for (var i = 0; i < elements.length; i++) {
-        var prices = elements[i].getAttribute('data-rotate');
-        var period = elements[i].getAttribute('data-period');
-        if (prices) {
-            new TxtRotate(elements[i], JSON.parse(prices), period);
-        }
     }
-
     /* End Rotate Text stuff */
 });

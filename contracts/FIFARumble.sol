@@ -34,7 +34,7 @@ contract FIFARumble {
     event InsufficientFee(uint missing);
     event FeeToHigh(uint spare);
     event TournamentFull(uint mP);
-    event TooManyPlayers(uint nOM); 
+    event Start(); 
    
     //fee in ETH
     function createTournament(uint _fee, uint _maxPlayers, string _tournamentName) external gameMasterOnly {
@@ -44,20 +44,19 @@ contract FIFARumble {
         tournamentName = _tournamentName;
     }
     
-    function startTournament() external gameMasterOnly returns(uint[15][6] gamePlan) {
+    function startTournament() external gameMasterOnly {
         registrationOpen = false;
-        
         //more tournament types to come
-        gamePlan = getRoundRobin();
+        emit Start();
     }
 
-    function getTournament() external view returns (string, uint, uint, uint) {
+    function getTournament() external view returns (string, uint, uint, uint, bool) {
         uint i = getPlayerCount();
-        return (tournamentName, fee, maxPlayers, i);
+        return (tournamentName, fee, maxPlayers, i, registrationOpen);
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
-    function getRoundRobin() gameMasterOnly view internal returns (uint[15][6] gamePlan) {
+    function getRoundRobin() gameMasterOnly view external returns (uint[15][6] gamePlan) {
         uint nOM = getNumberOfMatches();
         uint nOP = getPlayerCount();
         uint modRound = 1;
@@ -109,7 +108,7 @@ contract FIFARumble {
     function register(string _playerName, string _club) playerOnly registrationValid external payable returns(bool reg) {
 
         if (getPlayerCount() >= maxPlayers) {
-            TournamentFull(maxPlayers);
+            emit TournamentFull(maxPlayers);
             revert();
         }
 
@@ -119,12 +118,12 @@ contract FIFARumble {
             return reg;
 
         } else if (msg.value < fee) {
-            InsufficientFee(fee - msg.value);
+            emit InsufficientFee(fee - msg.value);
             revert();
 
         } else if (msg.value > fee) {
             msg.sender.transfer(msg.value - fee);
-            FeeToHigh(msg.value - fee);
+            emit FeeToHigh(msg.value - fee);
             setPlayer(_playerName, _club);
             reg = true;
             return reg;

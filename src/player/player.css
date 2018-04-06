@@ -30,11 +30,4 @@ fieldset {
     font-family: 'Mina', sans-serif;
 }
 
-.container {
-    color: var(--color-co-primary);
-    width: 60%;
-    min-width: 250px;
-    margin: 0 auto;
-}
-
 
