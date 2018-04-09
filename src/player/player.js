@@ -1,7 +1,9 @@
 
 
 $(document).ready(function () {
-
+if (getCookie("address") !== "") {
+    //window.location = "../gameMaster/gamePlan.html";
+}
     var fee = null;
 
     // if (typeof web3 !== 'undefined') {
@@ -57,8 +59,12 @@ $(document).ready(function () {
                 count = result*1 + 1;
                 var name = $("#name").val()
                 var club = $("#club").val()
-                alert(name)
-                FIFA.register(name, club, { from: web3.eth.accounts[count], value: fee, gas: 500000 })
+ 
+                FIFA.register(name, club, { from: web3.eth.accounts[count], value: fee, gas: 500000 }, function(err){
+                    if (!err) {
+                        document.cookie = "address="+web3.eth.accounts[count]; 
+                    }
+                })
                 return;
                 // if (FIFA.register(name, club)) {
                 //     alert("Success")
@@ -153,3 +159,4 @@ $(document).ready(function () {
     }
     /* End Rotate Text stuff */
 });
+

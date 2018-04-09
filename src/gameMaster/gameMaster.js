@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     $("#rumble").on("click", function () {
         FIFA.startTournament();
-        //window.location ="gamePlan.html"
+        window.open("gamePlan.html", '_blank')
     });
 
     $("#start").on("click", function () {

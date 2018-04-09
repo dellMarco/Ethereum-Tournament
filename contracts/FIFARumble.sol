@@ -150,7 +150,7 @@ contract FIFARumble {
         address tempAddress = msg.sender;
         uint tempID = getPlayerCount() + 1;
         Player storage player = players[tempAddress]; 
-        tempAddress = playerIDs[tempID];
+        playerIDs[tempID] = tempAddress;
 
         player.pID = tempID;
         player.name = _playerName;

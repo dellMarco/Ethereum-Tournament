@@ -64,42 +64,6 @@ const FIFAContract = web3.eth.contract([
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "spare",
-				"type": "uint256"
-			}
-		],
-		"name": "FeeToHigh",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "missing",
-				"type": "uint256"
-			}
-		],
-		"name": "InsufficientFee",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "mP",
-				"type": "uint256"
-			}
-		],
-		"name": "TournamentFull",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [],
 		"name": "kill",
@@ -132,6 +96,18 @@ const FIFAContract = web3.eth.contract([
 		"type": "function"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "mP",
+				"type": "uint256"
+			}
+		],
+		"name": "TournamentFull",
+		"type": "event"
+	},
+	{
 		"constant": false,
 		"inputs": [],
 		"name": "startTournament",
@@ -141,15 +117,39 @@ const FIFAContract = web3.eth.contract([
 		"type": "function"
 	},
 	{
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "fallback"
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "spare",
+				"type": "uint256"
+			}
+		],
+		"name": "FeeToHigh",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "missing",
+				"type": "uint256"
+			}
+		],
+		"name": "InsufficientFee",
+		"type": "event"
 	},
 	{
 		"inputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "fallback"
 	},
 	{
 		"constant": true,
@@ -264,7 +264,7 @@ const FIFAContract = web3.eth.contract([
 		"outputs": [
 			{
 				"name": "gamePlan",
-				"type": "uint256[15][6]"
+				"type": "uint256[36][6]"
 			}
 		],
 		"payable": false,
@@ -338,3 +338,19 @@ $(document).ready(function () {
 
 
 });
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
