@@ -36,6 +36,23 @@ contract FIFARumble {
     event TournamentFull(uint mP);
     event Start(); 
    
+     ////modifiers////
+    modifier gameMasterOnly {
+        require(msg.sender == gameMaster);
+        _;
+    }
+
+    modifier playerOnly {
+        require(msg.sender != gameMaster);
+        _;
+    }
+
+    modifier registrationValid {
+        require(registrationOpen = true);
+        _;
+    }
+
+
     //fee in ETH
     function createTournament(uint _fee, uint _maxPlayers, string _tournamentName) external gameMasterOnly {
         registrationOpen = true;
@@ -46,7 +63,6 @@ contract FIFARumble {
     
     function startTournament() external gameMasterOnly {
         registrationOpen = false;
-        //more tournament types to come
         emit Start();
     }
 
@@ -192,22 +208,7 @@ contract FIFARumble {
 
     }
 
-    ////modifiers////
-    modifier gameMasterOnly {
-        require(msg.sender == gameMaster);
-        _;
-    }
-
-    modifier playerOnly {
-        require(msg.sender != gameMaster);
-        _;
-    }
-
-    modifier registrationValid {
-        require(registrationOpen = true);
-        _;
-    }
-
+  
     function FIFARumble() public {
         gameMaster = msg.sender;
     } 
