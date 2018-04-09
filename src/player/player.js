@@ -11,7 +11,6 @@ $(document).ready(function () {
 
     // }
 
-
     FIFA.getTournament(function (error, result) {
         if (!error) {
             if (result[0] != "") {
@@ -36,96 +35,47 @@ $(document).ready(function () {
         else
             console.error(error);
     });
-
-    $("#dialog").dialog({
-        autoOpen: false,
-        show: {
-            effect: "blind",
-            duration: 250
-        },
-        hide: {
-            effect: "blind",
-            duration: 250
+    $("#opener").on("click", function () {
+        if ($("#name").val() == "") {
+            $("#name").effect("shake");
+            return;
         }
+        if ($("#club").val() == "") {
+            $("#club").effect("shake");
+            return;
+        }
+       
+        addUser()
+        
     });
 
-
-    var dialog, form,
-
-        name = $("#name"),
-        club = $("#club"),
-        eth_address = $("#eth_address")
-    allFields = $([]).add(name).add(club).add(eth_address),
-        tips = $(".validateTips");
-
-    function updateTips(t) {
-        tips
-            .text(t)
-            .addClass("ui-state-highlight");
-        setTimeout(function () {
-            tips.removeClass("ui-state-highlight", 1500);
-        }, 500);
-    }
-
-    function checkLength(o, n, min) {
-        if (o.val().length < min) {
-            o.addClass("ui-state-error");
-            updateTips("Länge von " + n + " muss mindestens " +
-                min + " betragen.");
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     function addUser() {
-        var valid = true;
-        allFields.removeClass("ui-state-error");
+        FIFA.getPlayerCount(function (error, result) {
+    
+            if (!error) {
+                count = result*1 + 1;
+                var name = $("#name").val()
+                var club = $("#club").val()
+                alert(name)
+                FIFA.register(name, club, { from: web3.eth.accounts[count], value: fee, gas: 500000 })
+                return;
+                // if (FIFA.register(name, club)) {
+                //     alert("Success")
+                // } else {
+                //     alert("fail")
+                // }
 
-        valid = valid && checkLength(name, "Alias", 3);
-        valid = valid && checkLength(club, "Verein", 3);
+                //windows.location = "../gameMaster/gamePlan.html";
 
-        if (valid) {
-            FIFA.register(toString(name), toString(club), { from: web3.eth.accounts[1], value: '2000000000000000000', gas: 500000 })
 
-            // if (FIFA.register(name, club)) {
-            //     alert("Success")
-            // } else {
-            //     alert("fail")
-            // }
-
-            dialog.dialog("close");
-            //windows.location = "../gameMaster/gamePlan.html";
-        }
-
-        return valid;
+            } else {
+                alert(error)
+            }
+        })
     }
 
-    dialog = $("#register").dialog({
-        autoOpen: false,
-        resizable: false,
-        modal: true,
-        buttons: {
-            "Registrieren": addUser,
-            Cancel: function () {
-                dialog.dialog("close");
-            }
-        },
-        close: function () {
-            form[0].reset();
-            allFields.removeClass("ui-state-error");
-        }
-    });
 
-    form = dialog.find("form").on("submit", function (event) {
-        event.preventDefault();
-
-    });
-
-    $("#opener").on("click", function () {
-        const open = FIFA.getTournament();
-        dialog.dialog("open");
-    });
 
 
 

@@ -10,9 +10,19 @@ body {
   font-family: 'Mina', sans-serif;  
 }
 
+.smallbox {
+  width: 90px;
+}
+
 input, select, textarea, button {
   font-family: inherit;
 }
+
+.horizontalBox {
+  display: inline-block;
+  text-align: left;
+  margin-right: 0.5em;
+  }
 
 button {
   font-family: 'Mina', sans-serif;

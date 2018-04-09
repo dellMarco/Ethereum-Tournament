@@ -56,7 +56,7 @@ contract FIFARumble {
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
-    function getRoundRobin() gameMasterOnly view external returns (uint[15][6] gamePlan) {
+    function getRoundRobin() gameMasterOnly view external returns (uint[36][6] gamePlan) {
         uint nOM = getNumberOfMatches();
         uint nOP = getPlayerCount();
         uint modRound = 1;
@@ -171,14 +171,28 @@ contract FIFARumble {
             players[_playerAddress].counterGoals);
     }
 
-    function getPlayerByID(uint _playerID) view public returns (address) {
+    function getPlayer(uint _playerID) view public returns (
+        address addressP,
+        string name,
+        string club,
+        uint points,
+        uint goals,
+        uint counterGoals)
+        {
+
+        addressP = (playerIDs[_playerID]);
         
-        return (playerIDs[_playerID]);
+        return (
+            addressP,
+            players[addressP].name,
+            players[addressP].club,
+            players[addressP].points,
+            players[addressP].goals,
+            players[addressP].counterGoals);
 
     }
 
     ////modifiers////
-
     modifier gameMasterOnly {
         require(msg.sender == gameMaster);
         _;

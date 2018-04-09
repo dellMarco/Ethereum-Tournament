@@ -107,7 +107,7 @@ $(document).ready(function () {
             }
             else {
                 console.error(error);
-                alert(error);
+                alert("Wrong Contract Address, see Console log for more Information");
             }
         });
     }
