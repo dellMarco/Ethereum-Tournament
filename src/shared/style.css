@@ -56,8 +56,16 @@ td {
   border: 1px solid black;
 }
 
+td:first-child {
+  font-weight: bold;
+}
+
 th {
   border: 1px solid black;
+}
+
+table tr:hover{
+  background-color: var(--color-co-yellow);;
 }
 
 input {

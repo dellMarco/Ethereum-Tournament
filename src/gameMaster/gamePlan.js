@@ -31,10 +31,14 @@ $(document).ready(function () {
                         var cell4 = row.insertCell(3)
                         var cell5 = row.insertCell(4);
                         var cell6 = row.insertCell(5);
+                        var cell7 = row.insertCell(5);
+                        var cell8 = row.insertCell(5);
 
                         cell1.innerHTML = gameNumber;
-                        cell2.innerHTML = p1 + ": " + p1Name;
-                        cell3.innerHTML = p2 + ": " + p2Name;;
+                        cell2.innerHTML = p1
+                        cell3.innerHTML = p1Name
+                        cell4.innerHTML = p2
+                        cell5.innerHTML = p2Name
                  
 
                     }
