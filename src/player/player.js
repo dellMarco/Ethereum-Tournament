@@ -6,14 +6,7 @@ if (getCookie("address") !== "") {
 }
     var fee = null;
 
-    // if (typeof web3 !== 'undefined') {
-    //     web3 = new Web3(web3.currentProvider);
-    // } else {
-    //     // set the provider you want from Web3.providers
-
-    // }
-
-    FIFA.getTournament(function (error, result) {
+   FIFA.getTournament(function (error, result) {
         if (!error) {
             if (result[0] != "") {
                 document.getElementById("opener").disabled = false;

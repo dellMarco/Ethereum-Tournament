@@ -1,7 +1,7 @@
 
 
 $(document).ready(function () {
-    alert(FIFA.getPlayer(1)[1])
+
     $("button").addClass("button");
 
 
