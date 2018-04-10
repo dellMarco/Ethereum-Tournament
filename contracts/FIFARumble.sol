@@ -8,6 +8,7 @@ contract FIFARumble {
     uint maxPlayers;
     string tournamentName;
     bool registrationOpen;
+    bool tournamentStarted;
     address public gameMaster;
 
     struct Player {
@@ -62,14 +63,15 @@ contract FIFARumble {
         tournamentName = _tournamentName;
     }
     
-    function startTournament() external gameMasterOnly {
+    function startTournament() public gameMasterOnly {
         registrationOpen = false;
+        tournamentStarted = true;
         emit Start();
     }
 
-    function getTournament() external view returns (string, uint, uint, uint, bool) {
+    function getTournament() external view returns (string, uint, uint, uint, bool, bool) {
         uint i = getPlayerCount();
-        return (tournamentName, fee, maxPlayers, i, registrationOpen);
+        return (tournamentName, fee, maxPlayers, i, registrationOpen, tournamentStarted);
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
