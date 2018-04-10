@@ -22,15 +22,24 @@ $(document).ready(function () {
             return;
         }
 
-        FIFA.createTournament($("#fee").val() * '1000000000000000000', $("#slider").slider("value"), $("#name").val());
-        var wait3s = window.setTimeout(location.reload(), 3000);
+        FIFA.createTournament($("#fee").val() * '1000000000000000000', $("#slider").slider("value"), $("#name").val(), function(err, res){
+            if (!err) {
+                document.cookie = "address="+ web3.eth.defaultAccount+";path=/"
+                var wait3s = window.setTimeout(location.reload(), 3000);
 
+            } else {
+                console.log(err)
+            }
+        });
+        
+        
     });
 
 
 
     $("#reset").on("click", function () {
-        resetCookie();
+        document.cookie = "address="+ web3.eth.defaultAccount+";path=/"
+
     });
 
     $("#fee").on("keyup", function () {

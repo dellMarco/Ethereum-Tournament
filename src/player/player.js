@@ -62,7 +62,7 @@ if (getCookie("address") !== "") {
  
                 FIFA.register(name, club, { from: web3.eth.accounts[count], value: fee, gas: 500000 }, function(err){
                     if (!err) {
-                        document.cookie = "address="+web3.eth.accounts[count]; 
+                        document.cookie = "address="+web3.eth.accounts[count]+";path=/"; 
                     }
                 })
                 return;

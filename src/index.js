@@ -315,6 +315,7 @@ const FIFAContract = web3.eth.contract([
         console.log(e);
     }
 }); */
+
 const FIFA = FIFAContract.at("0x8cdaf0cd259887258bc13a92c0a6da92698644c0");
 
 //Get CMC Data

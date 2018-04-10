@@ -16,9 +16,9 @@ $(document).ready(function () {
 
 
                     for (let c = 0; c <= res2[0].length - 1; c++) {
-                      
+
                         const gameNumber = res2[0][c];
-                        if (gameNumber == 0) { break; } 
+                        if (gameNumber == 0) { break; }
                         const p1 = res2[1][c];
                         var p1Name = FIFA.getPlayer(p1)[1]
                         const p2 = res2[2][c];
@@ -39,7 +39,35 @@ $(document).ready(function () {
                         cell3.innerHTML = p1Name
                         cell4.innerHTML = p2
                         cell5.innerHTML = p2Name
-                 
+                        cell6.innerHTML = ""
+                        cell7.innerHTML = ""
+                        cell8.innerHTML = ""
+
+                        var a = "contenteditable";
+                        //row.addEventListener("click", (function () { alert(this.cells[0].innerHTML); }));
+                        row.addEventListener("click", (
+                            function () {
+                                if (getCookie("address") === web3.eth.defaultAccount) {
+                                    this.cells[5].setAttribute(a, 'true');
+                                    this.cells[6].setAttribute(a, 'true');
+                                } else {
+                                    alert(getCookie("address"))
+                                    alert("Nur der Game Master kann Spielstände eintragen!")
+                                }
+
+                            }));
+                        row.addEventListener('keyup', function () {
+                            var p1g = parseInt(this.cells[5].innerHTML)
+                            var p2g = parseInt(this.cells[6].innerHTML)
+                            if (p1g < p2g && p1g !== "" && p2g !== "") {
+                                this.cells[7].innerHTML = "Spieler 2"
+                            } else if (p1g > p2g && p1g !== "" && p2g !== "") {
+                                this.cells[7].innerHTML = "Spieler 1"
+                            } else if (p1g == p2g || isNaN(p1g) || isNaN(p2g)) {
+                                this.cells[7].innerHTML = ""
+                            }
+
+                        })
 
                     }
                     $("#gamePlan").show();
@@ -53,8 +81,8 @@ $(document).ready(function () {
         }
     });
 
-
-
+ 
+    //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
 
 
 

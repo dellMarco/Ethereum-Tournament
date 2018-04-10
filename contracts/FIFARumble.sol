@@ -35,6 +35,7 @@ contract FIFARumble {
     event FeeToHigh(uint spare);
     event TournamentFull(uint mP);
     event Start(); 
+    event MatchDecided(Encounter);
    
      ////modifiers////
     modifier gameMasterOnly {
@@ -72,7 +73,7 @@ contract FIFARumble {
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
-    function getRoundRobin() gameMasterOnly view external returns (uint[36][6] gamePlan) {
+    function getRoundRobin() gameMasterOnly view external returns (uint[36][3] gamePlan) {
         uint nOM = getNumberOfMatches();
         uint nOP = getPlayerCount();
         uint modRound = 1;
