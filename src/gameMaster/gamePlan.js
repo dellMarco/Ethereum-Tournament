@@ -1,11 +1,10 @@
 
 
 $(document).ready(function () {
-    var i = 1* 1
-    FIFA.getPlayer((i), function(err, res){
+    
+    FIFA.getPlayer.call((1), function(err, res){
         if (!err) {
             console.log("fuck: " + res)
-         
         } else {
             console.log(err)
         }
@@ -47,7 +46,7 @@ $(document).ready(function () {
                     const gameNumber = res2[0][c];
                     if (gameNumber == 0) { break; }
                     const p1 = res2[1][c];
-                    var p1Name = FIFA.getPlayer(p1.toNumber())[1]
+                    var p1Name = FIFA.getPlayer(p1)[1]
                     const p2 = res2[2][c];
                     const p2Name = FIFA.getPlayer(p2)[1];
                     var table = document.getElementById("gameTable");
@@ -60,10 +59,9 @@ $(document).ready(function () {
                     var cell6 = row.insertCell(5);
                     var cell7 = row.insertCell(5);
                     var cell8 = row.insertCell(5);
-                    console.log(p1Name)
                     cell1.innerHTML = gameNumber;
                     cell2.innerHTML = p1
-                    cell3.innerHTML = p1Name + " a"
+                    cell3.innerHTML = p1Name
                     cell4.innerHTML = p2
                     cell5.innerHTML = p2Name
                     cell6.innerHTML = ""

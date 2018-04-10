@@ -215,15 +215,15 @@ const FIFAContract = web3.eth.contract([
 		"constant": true,
 		"inputs": [
 			{
-				"name": "_playerAddress",
-				"type": "address"
+				"name": "_playerID",
+				"type": "uint256"
 			}
 		],
 		"name": "getPlayer",
 		"outputs": [
 			{
-				"name": "pID",
-				"type": "uint256"
+				"name": "addressP",
+				"type": "address"
 			},
 			{
 				"name": "name",
@@ -254,15 +254,15 @@ const FIFAContract = web3.eth.contract([
 		"constant": true,
 		"inputs": [
 			{
-				"name": "_playerID",
-				"type": "uint256"
+				"name": "_playerAddress",
+				"type": "address"
 			}
 		],
 		"name": "getPlayer",
 		"outputs": [
 			{
-				"name": "addressP",
-				"type": "address"
+				"name": "pID",
+				"type": "uint256"
 			},
 			{
 				"name": "name",
