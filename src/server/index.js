@@ -17,7 +17,6 @@ let FIFA;
 
 web3.eth.getAccounts()
     .then(accounts => {
-
         const content = fs.readFileSync(path.join(__dirname, '..', '..', 'build', 'contracts', 'FIFARumble.json'), 'utf8');
         FIFARumble = JSON.parse(content);
         return new web3.eth.Contract(FIFARumble.abi)
@@ -31,26 +30,22 @@ web3.eth.getAccounts()
     })
     .then(contractInstance => FIFA = contractInstance)
     .then(() => app.listen(8080, err => {
+       
         if (err) {
             return console.error(err);
-        } else {
+        } else {       
             console.log('Server running at ', 8080);
-
         }
     }));
 
-
 const app = express();
-
-
 
 app.get('/api/contract', (req, res) => {
     res.json({
         abi: FIFARumble.abi,
-        address: FIFA.options.address
+        address: FIFA.options.address,
     });
 });
 
 const staticFilePath = path.join(__dirname, '..', 'client');
 app.use(express.static(staticFilePath));
-

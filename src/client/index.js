@@ -1,6 +1,14 @@
 var web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
-web3.eth.defaultAccount = web3.eth.accounts[0];
-var FIFA = {}
+var allAccounts = {};
+
+web3.eth.getAccounts()
+	.then(accounts => {
+		web3.eth.defaultAccount = accounts[0];
+		allAccounts = accounts;
+	})
+
+var FIFA = {};
+var defaultAcc;
 
 $.ajax({
 	url: '/api/contract',
@@ -11,11 +19,6 @@ $.ajax({
 	error: console.error
 });
 
-
-/* .done(result => {
-	FIFA = new web3.eth.Contract(result.abi, result.address);
-})
-	.fail(err => console.error(err)) */
 
 //Get CMC Data
 function Get(yourUrl) {
@@ -52,4 +55,5 @@ function getCookie(cname) {
 		}
 	}
 	return "";
+
 }

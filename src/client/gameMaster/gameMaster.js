@@ -4,12 +4,17 @@ $(document).ready(function () {
 
     $("button").addClass("button");
 
-
     loadData();
 
     $("#rumble").on("click", function () {
-        FIFA.startTournament();
-        window.open("gamePlan.html", '_blank')
+        FIFA.methods.startTournament().call((function (err, res){
+            if (!err) {
+                console.log("successsfully created Tournament")
+            } else {
+                console.log(err)
+            }
+        }));
+        //window.open("gamePlan.html", '_blank')
     });
 
     $("#start").on("click", function () {
@@ -22,24 +27,26 @@ $(document).ready(function () {
             return;
         }
 
-        FIFA.createTournament($("#fee").val() * '1000000000000000000', $("#slider").slider("value"), $("#name").val(), function(err, res){
-            if (!err) {
-                document.cookie = "address="+ web3.eth.defaultAccount+";path=/"
-                var wait3s = window.setTimeout(location.reload(), 3000);
+        FIFA.methods.createTournament(
+            ($("#fee").val() * '1000000000000000000'),
+            ($("#slider").slider("value")),
+            ($("#name").val()))
+            .send(
+                { from: web3.eth.defaultAccount },
+                function (err, res) {
+                    if (!err) {
+                        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
+                        var wait3s = window.setTimeout(location.reload(), 3000);
 
-            } else {
-                console.log(err)
-            }
-        });
-        
-        
+                    } else {
+                        console.log(err)
+                    }
+                });
+
     });
 
-
-
     $("#reset").on("click", function () {
-        document.cookie = "address="+ web3.eth.defaultAccount+";path=/"
-
+        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
     });
 
     $("#fee").on("keyup", function () {
@@ -85,7 +92,7 @@ $(document).ready(function () {
         }
     });
     function loadData() {
-        FIFA.getTournament(function (error, parsed) {
+        FIFA.methods.getTournament().call(function (error, parsed) {
             if (!error) {
                 if (parsed[0] != "") {
                     $("#name").val(parsed[0]);
@@ -110,7 +117,7 @@ $(document).ready(function () {
                     }
                 } else {
                     document.getElementById("rumble").disabled = true;
-   
+
                     $('#slider2').hide();
                 }
             }

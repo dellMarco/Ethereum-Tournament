@@ -2,33 +2,33 @@
 
 $(document).ready(function () {
 
-    FIFA.getTournament(function (error, parsed) {
+    FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
             if (parsed[5] == true) {
                 start()
 
             } else {
-                console.log(error)
+                console.log("not yet started")
                 $("#gamePlan").hide();
             }
+        } else {
+            console.log(error)
         }
     })
 
-    var tournamentStartEvent = FIFA.Start();
-
-    tournamentStartEvent.watch(function (err1, res1) {
+    /* FIFA.events.Start(function (err1, res1) {
 
         if (!err1) {
             start()
         } else {
-
+            console.log(err1)
         }
     });
-
+ */
     function start() {
         $("#loading").hide();
 
-        FIFA.getRoundRobin(function (err2, res2) {
+        FIFA.methods.getRoundRobin().call(function (err2, res2) {
 
             if (!err2) {
 
@@ -40,14 +40,22 @@ $(document).ready(function () {
 
                     //get names
                     const p1 = res2[1][c];
-                    const p1Name = FIFA.getPlayerByID(p1)[1]
                     const p2 = res2[2][c];
-                    const p2Name = FIFA.getPlayerByID(p2)[1];
+                    let p1Name;
+                    let p2Name;
+
+                    FIFA.methods.getPlayerByID(p1).call(function (errp1, resp1) {
+                        p1Name = resp1[1]
+                    })
+                    FIFA.methods.getPlayerByID(p2).call(function (errp2, resp2) {
+                        p2Name = resp2[1]
+                    })
+                    
                     var table = document.getElementById("gameTable");
 
                     //get encounters
-                    const wGoals = FIFA.getEncounter(gameNumber)[2]
-                    const lGoals = FIFA.getEncounter(gameNumber)[3]
+                    const wGoals = FIFA.methods.getEncounter(gameNumber).call()[2]
+                    const lGoals = FIFA.methods.getEncounter(gameNumber).call()[3]
 
                     var row = table.insertRow();
                     var cell1 = row.insertCell(0);
@@ -64,8 +72,8 @@ $(document).ready(function () {
                     cell4.innerHTML = p2
                     cell5.innerHTML = p2Name
 
-                    if (wGoals != 0) { cell6.innerHTML = wGoals } 
-                    if (lGoals != 0) { cell7.innerHTML = lGoals } 
+                    if (wGoals != 0) { cell6.innerHTML = wGoals }
+                    if (lGoals != 0) { cell7.innerHTML = lGoals }
                     cell8.innerHTML = ""
 
                     var a = "contenteditable";
@@ -122,7 +130,7 @@ $(document).ready(function () {
 
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
     function decide(mID, wID, lID, wg, lg) {
-        FIFA.decideMatch(mID, wID, lID, (wg * 1), (lg * 1), { gas: 3000000 }, function (err, res) {
+        FIFA.methods.decideMatch().send(mID, wID, lID, (wg * 1), (lg * 1), { gas: 3000000 }, function (err, res) {
             if (!err) {
                 alert("Success")
             } else {

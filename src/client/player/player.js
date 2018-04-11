@@ -1,12 +1,12 @@
 
 
 $(document).ready(function () {
-if (getCookie("address") !== "") {
-    //window.location = "../gameMaster/gamePlan.html";
-}
+    if (getCookie("address") !== "") {
+        //window.location = "../gameMaster/gamePlan.html";
+    }
     var fee = null;
 
-   FIFA.methods.getTournament().call(function (error, result) {
+    FIFA.methods.getTournament().call(function (error, result) {
         if (!error) {
             if (result[0] != "") {
                 document.getElementById("opener").disabled = false;
@@ -39,44 +39,43 @@ if (getCookie("address") !== "") {
             $("#club").effect("shake");
             return;
         }
-       
+
         addUser()
-        
+
     });
 
-
     function addUser() {
-        FIFA.getPlayerCount(function (error, result) {
-    
+        
+        FIFA.methods.getPlayerCount().call(function (error, result) {
+
             if (!error) {
-                count = result*1 + 1;
+                count = result * 1 + 1;
                 var name = $("#name").val()
                 var club = $("#club").val()
- 
-                FIFA.register(name, club, { from: web3.eth.accounts[count], value: fee, gas: 500000 }, function(err){
-                    if (!err) {
-                        document.cookie = "address="+web3.eth.accounts[count]+";path=/"; 
-                    }
-                })
-                return;
-                // if (FIFA.register(name, club)) {
-                //     alert("Success")
-                // } else {
-                //     alert("fail")
-                // }
+
+                FIFA.methods.register(
+                    name,
+                    club)
+                    .send(
+                        {
+                            from: allAccounts[count],
+                            value: fee, gas: 500000
+                        },
+                        function (err) {
+                            if (!err) {
+                                document.cookie = "address=" + allAccounts[count] + ";path=/";
+                            }
+                        })
+                        console.log(name)
+                        return;
 
                 //windows.location = "../gameMaster/gamePlan.html";
-
-
+                        
             } else {
                 alert(error)
             }
         })
     }
-
-
-
-
 
     /* Rotate Text stuff */
     function rotate() {

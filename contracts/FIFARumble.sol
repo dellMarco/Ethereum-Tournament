@@ -114,12 +114,12 @@ contract FIFARumble {
 
     function decideMatch(uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals) gameMasterOnly external {
 
-        Encounter storage e = encounters[_matchID];
+        Encounter storage en = encounters[_matchID];
 
-        e.winnerID = _winner;
-        e.loserID = _loser;
-        e.winnerGoals = _winnerGoals;
-        e.loserGoals = _loserGoals;
+        en.winnerID = _winner;
+        en.loserID = _loser;
+        en.winnerGoals = _winnerGoals;
+        en.loserGoals = _loserGoals;
 
     }
     ////player functions////
