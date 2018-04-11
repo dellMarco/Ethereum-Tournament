@@ -190,7 +190,7 @@ contract FIFARumble {
             players[_playerAddress].counterGoals);
     }
 
-    function getPlayer(uint _playerID) view public returns (
+    function getPlayerByID(uint _playerID) view public returns (
         address addressP,
         string name,
         string club,
@@ -211,7 +211,21 @@ contract FIFARumble {
 
     }
 
-  
+    function getEncounter(uint _matchID) view public returns (
+        uint winnerID,
+        uint loserID,
+        uint winnerGoals,
+        uint loserGoals) {
+
+        return (
+            encounters[_matchID].winnerID,
+            encounters[_matchID].loserID,
+            encounters[_matchID].winnerGoals,
+            encounters[_matchID].loserGoals
+            );
+
+    }
+
     function FIFARumble() public {
         gameMaster = msg.sender;
     } 

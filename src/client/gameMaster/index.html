@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FIFARumble</title>
+
+    <link rel="stylesheet" href="gameMaster.css">
+    <link rel="stylesheet" href="../shared/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css?family=Mina|Roboto" rel="stylesheet">
+
+    <script src="../shared/web3.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="gameMaster.js"></script>
+    <script src="../index.js"></script>
+
+</head>
+
+<body>
+    <header>FIFARumble</header>
+
+    <div class="container">
+        <label for="name">Turniername</label>
+        <input type="text" name="name" id="name" title="Wähle den Turniernamen">
+
+        <label for="fee">Teilnahmegebühr</label>
+        <div id="fees">
+            <div class="horizontalBox">ETH
+                <input class="smallbox" type="number" min="0" name="fee" id="fee" title="Wie hoch soll die Teilnahmegebühr sein?">
+            </div>
+
+
+            <div class="horizontalBox">EUR
+                <input class="smallbox" type="number" min="0" name="fee2" id="fee2" title="Wie hoch soll die Teilnahmegebühr sein?">
+            </div>
+        </div>
+
+        <label for="slider">Maximale Spielerzahl</label>
+        <div id="slider">
+            <div id="custom-handle" class="ui-slider-handle"></div>
+        </div>
+
+
+        <label for="slider2">Angemeldete Spieler</label>
+        <div id="slider2">
+            <div id="custom-handle2" class="ui-slider-handle"></div>
+        </div>
+
+        <div class="horizontalBox">
+            <button id="start">Anmeldung eröffnen</button>
+        </div>
+        <div class="horizontalBox">
+            <button id="rumble">Turnier starten</button>
+        </div>
+             <hr>
+        <div class="horizontalBox">
+            <button id="reset">Turnierleitung beenden</button>
+        </div>
+        
+    </div>
+
+</body>
+
+<footer>
+    <img src="../shared/targens_Logo.svg" width="150" class="logo" />
+</footer>
+
+</html>

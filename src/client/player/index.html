@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FIFARumble</title>
+
+    <link rel="stylesheet" href="player.css">
+    <link rel="stylesheet" href="../shared/style.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://fonts.googleapis.com/css?family=Mina|Roboto" rel="stylesheet">
+
+    <script src="/shared/web3.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="player.js"></script>
+    <script src="../index.js"></script>
+
+</head>
+
+<body>
+    <header>FIFARumble</header>
+    <div class="container">
+
+        <h2 id="tournament"></h2>
+        <h3 id="tournamentCount"></h3>
+
+        <h4 id="tournamentInfo">Die Teilnahmegebühr beträgt
+            <span class="txt-rotate" data-period="1500" data-rotate='[""]'></span>
+        </h4>
+
+    </div>
+
+</body>
+
+<div id="register" class="container">
+    <br>
+
+    <div class="horizontalBox">
+        <label for="name">Alias</label>
+        <input type="text" name="name" id="name" class="text ui-widget-content ui-corner-all" title="Wähle deinen Spielernamen!">
+    </div>
+    <div class="horizontalBox">
+        <label for="club">Verein</label>
+        <input type="text" name="club" id="club" class="text ui-widget-content ui-corner-all" title="Welchen Verein möchtest du spielen?">
+    </div>
+
+    <div class="horizontalBox">
+   
+        <button id="opener">Jetzt Registrieren</button>
+    </div>
+</div>
+
+<footer>
+    <img src="../shared/targens_Logo.svg" width="150" class="logo" />
+</footer>
+
+</html>
