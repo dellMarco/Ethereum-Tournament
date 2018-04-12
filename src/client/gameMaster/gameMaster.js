@@ -1,5 +1,3 @@
-
-
 $(document).ready(function () {
 
     $("button").addClass("button");
@@ -7,13 +5,15 @@ $(document).ready(function () {
     loadData();
 
     $("#rumble").on("click", function () {
-        FIFA.methods.startTournament().call((function (err, res){
-            if (!err) {
-                console.log("successsfully created Tournament")
-            } else {
-                console.log(err)
-            }
-        }));
+        FIFA.methods.startTournament().send(
+            { from: web3.eth.defaultAccount },
+            (function (err, res) {
+                if (!err) {
+                    console.log("Successsfully started Tournament")
+                } else {
+                    console.log(err)
+                }
+            }));
         //window.open("gamePlan.html", '_blank')
     });
 

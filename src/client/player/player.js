@@ -66,7 +66,7 @@ $(document).ready(function () {
                                 document.cookie = "address=" + allAccounts[count] + ";path=/";
                             }
                         })
-                        console.log(name)
+                        console.log(name+" registriert")
                         return;
 
                 //windows.location = "../gameMaster/gamePlan.html";
