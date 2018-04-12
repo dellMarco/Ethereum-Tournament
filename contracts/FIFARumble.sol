@@ -14,7 +14,6 @@ contract FIFARumble {
     struct Player {
         uint pID;
         string name;
-        string club;
         uint points;
         uint goals;
         uint counterGoals;
@@ -124,7 +123,7 @@ contract FIFARumble {
     }
     ////player functions////
 
-    function register(string _playerName, string _club) playerOnly registrationValid external payable returns(bool reg) {
+    function register(string _playerName) playerOnly registrationValid external payable returns(bool reg) {
 
         if (getPlayerCount() >= maxPlayers) {
             emit TournamentFull(maxPlayers);
@@ -132,7 +131,7 @@ contract FIFARumble {
         }
 
         if (msg.value == fee) {
-            setPlayer(_playerName, _club);
+            setPlayer(_playerName);
             reg = true;
             return reg;
 
@@ -143,13 +142,13 @@ contract FIFARumble {
         } else if (msg.value > fee) {
             msg.sender.transfer(msg.value - fee);
             emit FeeToHigh(msg.value - fee);
-            setPlayer(_playerName, _club);
+            setPlayer(_playerName);
             reg = true;
             return reg;
         }       
     }
 
-    function setPlayer(string _playerName, string _club) internal {
+    function setPlayer(string _playerName) internal {
         address tempAddress = msg.sender;
         uint tempID = getPlayerCount() + 1;
         Player storage player = players[tempAddress]; 
@@ -157,7 +156,6 @@ contract FIFARumble {
 
         player.pID = tempID;
         player.name = _playerName;
-        player.club = _club;
         playerAccts.push(tempAddress);
     }
 
@@ -175,7 +173,6 @@ contract FIFARumble {
     function getPlayer(address _playerAddress) view public returns (
         uint pID,
         string name,
-        string club,
         uint points,
         uint goals,
         uint counterGoals)
@@ -184,7 +181,6 @@ contract FIFARumble {
         return (
             players[_playerAddress].pID,
             players[_playerAddress].name,
-            players[_playerAddress].club,
             players[_playerAddress].points,
             players[_playerAddress].goals,
             players[_playerAddress].counterGoals);
@@ -193,7 +189,6 @@ contract FIFARumble {
     function getPlayerByID(uint _playerID) view public returns (
         address addressP,
         string name,
-        string club,
         uint points,
         uint goals,
         uint counterGoals)
@@ -204,7 +199,6 @@ contract FIFARumble {
         return (
             addressP,
             players[addressP].name,
-            players[addressP].club,
             players[addressP].points,
             players[addressP].goals,
             players[addressP].counterGoals);

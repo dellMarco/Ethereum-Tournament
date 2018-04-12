@@ -2,7 +2,8 @@
 
 $(document).ready(function () {
     if (getCookie("address") !== "") {
-        //window.location = "../gameMaster/gamePlan.html";
+        alert("Der Game Master kann nicht selbst mitspielen!")
+        window.location = "../gameMaster/gamePlan.html";
     }
     var fee = null;
 
@@ -35,27 +36,22 @@ $(document).ready(function () {
             $("#name").effect("shake");
             return;
         }
-        if ($("#club").val() == "") {
-            $("#club").effect("shake");
-            return;
-        }
 
         addUser()
 
     });
 
     function addUser() {
-        
+
         FIFA.methods.getPlayerCount().call(function (error, result) {
 
             if (!error) {
                 count = result * 1 + 1;
                 var name = $("#name").val()
-                var club = $("#club").val()
 
                 FIFA.methods.register(
-                    name,
-                    club)
+                    name
+                )
                     .send(
                         {
                             from: allAccounts[count],
@@ -66,11 +62,11 @@ $(document).ready(function () {
                                 document.cookie = "address=" + allAccounts[count] + ";path=/";
                             }
                         })
-                        console.log(name+" registriert")
-                        return;
+                console.log(name + " registriert")
+                return;
 
                 //windows.location = "../gameMaster/gamePlan.html";
-                        
+
             } else {
                 alert(error)
             }

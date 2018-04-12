@@ -6,23 +6,14 @@ $(document).ready(function () {
                 start()
 
             } else {
-                le.log("not yet started")
+                console.log("Not yet started")
 
             }
         } else {
-            le.log(error)
+            console.log(error)
         }
     })
 
-    /* FIFA.events.Start(function (err1, res1) {
-
-        if (!err1) {
-            start()
-        } else {
-            le.log(err1)
-        }
-    });
- */
     function start() {
         $("#loading").hide();
         $("#gamePlan").show();
@@ -85,7 +76,9 @@ $(document).ready(function () {
         var a = "contenteditable";
         row.addEventListener("click", (
             function () {
-                if (getCookie("address") === web3.eth.defaultAccount) {
+                console.log(web3.eth.defaultAccount)
+                console.log(getCookie("address"))
+                if (getCookie("address") == web3.eth.defaultAccount) {
                     this.cells[5].setAttribute(a, 'true');
                     this.cells[6].setAttribute(a, 'true');
                 } else {

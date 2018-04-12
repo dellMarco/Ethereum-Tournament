@@ -32,16 +32,22 @@ $(document).ready(function () {
             ($("#slider").slider("value")),
             ($("#name").val()))
             .send(
-                { from: web3.eth.defaultAccount },
+                {
+                    from: web3.eth.defaultAccount,
+                    gas: 1000000
+
+                },
                 function (err, res) {
                     if (!err) {
                         document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
-                        var wait3s = window.setTimeout(location.reload(), 3000);
-
                     } else {
                         console.log(err)
                     }
-                });
+                })
+            .then(() => {
+                location.reload();
+            }
+            )
 
     });
 
