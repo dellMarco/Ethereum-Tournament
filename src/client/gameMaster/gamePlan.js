@@ -76,14 +76,13 @@ $(document).ready(function () {
         var a = "contenteditable";
         row.addEventListener("click", (
             function () {
-                console.log(web3.eth.defaultAccount)
-                console.log(getCookie("address"))
-                if (getCookie("address") == web3.eth.defaultAccount) {
-                    this.cells[5].setAttribute(a, 'true');
-                    this.cells[6].setAttribute(a, 'true');
-                } else {
-                    alert("Nur der Game Master kann Spielstände eintragen!")
-                }
+
+                //if (getCookie("address") == web3.eth.defaultAccount) {
+                this.cells[5].setAttribute(a, 'true');
+                this.cells[6].setAttribute(a, 'true');
+                //} else {
+                //   alert("Nur der Game Master kann Spielstände eintragen!")
+                // }
 
             }));
         row.addEventListener('keyup', function () {

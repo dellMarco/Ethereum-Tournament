@@ -16,6 +16,7 @@ body {
 
 input, select, textarea, button {
   font-family: inherit;
+  font-size: 1em;
 }
 
 .horizontalBox {
@@ -39,6 +40,7 @@ header {
   padding: 10px 20px;
   background-color: white;
   color: var(--color-co-primary);
+  font-variant: small-caps;
   font-weight: bold;
   font-size: 25px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
@@ -87,6 +89,8 @@ input {
 label {
   display: block;
   margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 footer {

@@ -1,10 +1,8 @@
-
-
 $(document).ready(function () {
-    if (getCookie("address") !== "") {
+    /* if (getCookie("address") !== "") {
         alert("Der Game Master kann nicht selbst mitspielen!")
         window.location = "../gameMaster/gamePlan.html";
-    }
+    } */
     var fee = null;
 
     FIFA.methods.getTournament().call(function (error, result) {
@@ -42,41 +40,42 @@ $(document).ready(function () {
     });
 
     function addUser() {
+        let name;
 
-        FIFA.methods.getPlayerCount().call(function (error, result) {
-
-            if (!error) {
-                count = result * 1 + 1;
-                var name = $("#name").val()
-
-                FIFA.methods.register(
-                    name
-                )
-                    .send(
-                        {
-                            from: allAccounts[count],
-                            value: fee, gas: 500000
-                        },
-                        function (err) {
-                            if (!err) {
-                                document.cookie = "address=" + allAccounts[count] + ";path=/";
-                            }
-                        })
+        FIFA.methods.getPlayerCount().call()
+            .then(pCount => {
+                var count = pCount * 1 + 1;
+                name = $("#name").val()
+                console.log(name)
+                return FIFA.methods.register(name).send(
+                    {
+                        from: allAccounts[count],
+                        value: fee, gas: 500000
+                    })
+            })
+            .then(() => {
+                $.ajax({
+                    url: '/api/users',
+                    method: "POST",
+                    async: false,
+                    success: function (res) {
+                        console.log(res)
+                    },
+                    error: console.error,
+                    data: JSON.stringify({
+                        username: name,
+                        password: '1234'
+                    }),
+                    contentType: 'application/json'
+                })
                 console.log(name + " registriert")
-                return;
+            })
 
-                //windows.location = "../gameMaster/gamePlan.html";
-
-            } else {
-                alert(error)
-            }
-        })
     }
 
     /* Rotate Text stuff */
     function rotate() {
         const TxtRotate = function (el, prices, period) {
-
 
             for (let index = 0; index < 4; index++) {
                 switch (index) {

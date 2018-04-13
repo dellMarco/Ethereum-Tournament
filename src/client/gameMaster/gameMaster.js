@@ -9,6 +9,7 @@ $(document).ready(function () {
             { from: web3.eth.defaultAccount },
             (function (err, res) {
                 if (!err) {
+
                     console.log("Successsfully started Tournament")
                 } else {
                     console.log(err)
@@ -39,7 +40,7 @@ $(document).ready(function () {
                 },
                 function (err, res) {
                     if (!err) {
-                        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
+                        setGameMaster();
                     } else {
                         console.log(err)
                     }
@@ -52,7 +53,7 @@ $(document).ready(function () {
     });
 
     $("#reset").on("click", function () {
-        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
+        //document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
     });
 
     $("#fee").on("keyup", function () {
@@ -88,6 +89,7 @@ $(document).ready(function () {
     var handle2 = $("#custom-handle2");
     $("#slider2").slider({
         min: 0,
+        max: 9,
         step: 1,
         disabled: true,
         create: function () {
@@ -97,6 +99,27 @@ $(document).ready(function () {
             handle2.text(ui.value);
         }
     });
+
+    function setGameMaster() {
+        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
+        document.cookie = 
+
+        $.ajax({
+            url: '/api/users',
+            method: 'POST',
+            async: false,
+            success: function (res) {
+                console.log(res)
+            },
+            error: console.error,
+            data: JSON.stringify({
+                username: "GameMaster",
+                password: "123pass"
+            }),
+            contentType: 'application/json'
+        });
+    }
+
     function loadData() {
         FIFA.methods.getTournament().call(function (error, parsed) {
             if (!error) {
@@ -124,7 +147,6 @@ $(document).ready(function () {
                 } else {
                     document.getElementById("rumble").disabled = true;
 
-                    $('#slider2').hide();
                 }
             }
             else {
