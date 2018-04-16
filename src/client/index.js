@@ -1,14 +1,15 @@
 var web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
 var allAccounts = {};
+var accLoad;
 
-web3.eth.getAccounts()
+accLoad = web3.eth.getAccounts()
 	.then(accounts => {
 		web3.eth.defaultAccount = accounts[0];
 		allAccounts = accounts;
 	})
 
 var FIFA = {};
-var defaultAcc;
+
 
 $.ajax({
 	url: '/api/contract',

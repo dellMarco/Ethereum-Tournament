@@ -1,6 +1,8 @@
 $(document).ready(function () {
-    $("#player").html("Test");
+
+    $("#user").html("Test");
     $("#gamePlan").hide();
+    
     FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
             if (parsed[5] == true) {

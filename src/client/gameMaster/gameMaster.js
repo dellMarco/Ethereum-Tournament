@@ -1,8 +1,8 @@
 
 
-$(document).ready(function () {
+accLoad.then(function () {
 
-
+    //check Cookie and PW
     if (getCookie("address") === web3.eth.defaultAccount) {
         console.log("GameMaster")
     } else {
@@ -13,7 +13,13 @@ $(document).ready(function () {
         }
     }
 
-    $("button").addClass("button");
+    //setHeader
+    web3.eth.getBalance(web3.eth.defaultAccount)
+        .then(bal => {
+            var eth = parseFloat(web3.utils.fromWei(bal, 'ether'))
+            $("#user").html("GameMaster | " + eth.toFixed(2) + " ETH")
+        }
+        );
 
     loadData();
 
@@ -27,12 +33,14 @@ $(document).ready(function () {
                     console.log("asd: " + err)
                 }
             }))
-        .then(() => {
-            console.log("todo: location")
-            //window.open("gamePlan.html", '_blank')
-        })
-        
+            .then(() => {
+                console.log("todo: location")
+                //window.open("gamePlan.html", '_blank')
+            })
+
     });
+
+    $("button").addClass("button");
 
     $("#start").on("click", function () {
         if ($("#name").val() == "") {
@@ -180,8 +188,8 @@ $(document).ready(function () {
             }
             else {
                 console.error(error);
-                alert("Wrong Contract Address, see Console log for more Information");
             }
         });
     }
+
 });

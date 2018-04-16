@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     /* if (getCookie("address") !== "") {
         alert("Der Game Master kann nicht selbst mitspielen!")
@@ -67,7 +68,7 @@ $(document).ready(function () {
                 })
             })
             .then(() => {
-                
+
                 console.log(name + " registriert")
             })
 
