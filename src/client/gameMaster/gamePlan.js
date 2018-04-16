@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $("#player").html("Test");
     $("#gamePlan").hide();
     FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
@@ -30,8 +31,8 @@ $(document).ready(function () {
                     const p2 = gamePlan[2][c];
                     let p1Name;
                     let p2Name;
-                    let wGoals;
-                    let lGoals;
+                    let p1Goals;
+                    let p2Goals;
 
                     FIFA.methods.getPlayerByID(p1).call()
                         .then(player1 => {
@@ -43,16 +44,16 @@ $(document).ready(function () {
                             return FIFA.methods.getEncounter(gameNumber).call()
                         })
                         .then(enc => {
-                            wGoals = enc[2]
-                            lGoals = enc[3]
-                            fillTable(gameNumber, p1, p1Name, p2, p2Name, wGoals, lGoals)
+                            p1Goals = enc[2]
+                            p2Goals = enc[3]
+                            fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals)
                         })
                 }
             })
         $("#gamePlan").show();
     }
 
-    function fillTable(gameNumber, p1, p1Name, p2, p2Name, wGoals, lGoals) {
+    function fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals) {
         var table = document.getElementById("gameTable");
         var row = table.insertRow();
         var cell1 = row.insertCell(0);
@@ -69,20 +70,24 @@ $(document).ready(function () {
         cell4.innerHTML = p2
         cell5.innerHTML = p2Name
 
-        if (wGoals != 0) { cell6.innerHTML = wGoals }
-        if (lGoals != 0) { cell7.innerHTML = lGoals }
-        cell8.innerHTML = ""
+        if (p1Goals != 0) { cell6.innerHTML = p1Goals }
+        if (p2Goals != 0) { cell7.innerHTML = p2Goals }
+        if (p1Goals > p2Goals) {
+            cell8.innerHTML = "Spieler 1"}
+        else if (p2Goals > p1Goals) {
+            cell8.innerHTML = "Spieler 2"
+        }
 
         var a = "contenteditable";
         row.addEventListener("click", (
             function () {
 
-                //if (getCookie("address") == web3.eth.defaultAccount) {
-                this.cells[5].setAttribute(a, 'true');
-                this.cells[6].setAttribute(a, 'true');
-                //} else {
-                //   alert("Nur der Game Master kann Spielstände eintragen!")
-                // }
+                if (getCookie("address") == web3.eth.defaultAccount) {
+                    this.cells[5].setAttribute(a, 'true');
+                    this.cells[6].setAttribute(a, 'true');
+                } else {
+                    alert("Nur der Game Master kann Spielstände eintragen!")
+                }
 
             }));
         row.addEventListener('keyup', function () {
@@ -93,7 +98,7 @@ $(document).ready(function () {
             var mID = this.cells[0].innerHTML * 1
             if (p1g < p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
-                if (confirm("Spielstand für Spiel " + mID + " in Blockchain speichern? \n\nSpieler 2 hat gewonnen!")) {
+                if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
                     decide(mID, p2ID, p1ID, p1g, p2g)
                     this.cells[7].innerHTML = "Spieler 2"
                 } else {
@@ -103,7 +108,7 @@ $(document).ready(function () {
                 }
             } else if (p1g > p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
-                if (confirm("Spielstand für Spiel " + mID + " in Blockchain speichern? \n\nSpieler 1 hat gewonnen!")) {
+                if (confirm("Spieler 1 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
                     decide(mID, p1ID, p2ID, p1g, p2g)
 
                     this.cells[7].innerHTML = "Spieler 1"
@@ -119,12 +124,12 @@ $(document).ready(function () {
         })
     }
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
-    function decide(mID, wID, lID, wg, lg) {
-        FIFA.methods.decideMatch().send(mID, wID, lID, (wg * 1), (lg * 1), { gas: 3000000 }, function (err, res) {
+    function decide(mID, wID, lID, p1W, p2G) {
+        FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).send({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {
             if (!err) {
-                alert("Success")
+                console.log("Success")
             } else {
-                alert(err)
+                console.log(err)
             }
         })
     }

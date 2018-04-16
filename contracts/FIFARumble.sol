@@ -20,10 +20,10 @@ contract FIFARumble {
     }
 
     struct Encounter {
-        uint winnerID;
-        uint loserID;
-        uint winnerGoals;
-        uint loserGoals;
+        uint p1ID;
+        uint p2ID;
+        uint p1Goals;
+        uint p2Goals;
     }
 
     mapping (uint=>Encounter) encounters;
@@ -111,14 +111,14 @@ contract FIFARumble {
         return numberOfMatches;
     }
 
-    function decideMatch(uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals) gameMasterOnly external {
+    function decideMatch(uint _matchID, uint _p1, uint _p2, uint _p1Goals, uint _p2Goals) gameMasterOnly external {
 
         Encounter storage en = encounters[_matchID];
 
-        en.winnerID = _winner;
-        en.loserID = _loser;
-        en.winnerGoals = _winnerGoals;
-        en.loserGoals = _loserGoals;
+        en.p1ID = _p1;
+        en.p2ID = _p2;
+        en.p1Goals = _p1Goals;
+        en.p2Goals = _p2Goals;
 
     }
     ////player functions////
@@ -206,16 +206,16 @@ contract FIFARumble {
     }
 
     function getEncounter(uint _matchID) view public returns (
-        uint winnerID,
-        uint loserID,
-        uint winnerGoals,
-        uint loserGoals) {
+        uint p1ID,
+        uint p2ID,
+        uint p1Goals,
+        uint p2Goals) {
 
         return (
-            encounters[_matchID].winnerID,
-            encounters[_matchID].loserID,
-            encounters[_matchID].winnerGoals,
-            encounters[_matchID].loserGoals
+            encounters[_matchID].p1ID,
+            encounters[_matchID].p2ID,
+            encounters[_matchID].p1Goals,
+            encounters[_matchID].p2Goals
             );
 
     }

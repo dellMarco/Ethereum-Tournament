@@ -43,6 +43,7 @@ header {
   font-variant: small-caps;
   font-weight: bold;
   font-size: 25px;
+  height: 30px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
@@ -91,6 +92,13 @@ label {
   margin-bottom: 10px;
   font-weight: bold;
   font-size: 1.2em;
+}
+
+.left {
+  float: left;
+}
+.right {
+  float: right;
 }
 
 footer {
