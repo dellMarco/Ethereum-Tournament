@@ -3,12 +3,12 @@ accLoad.then(function () {
 
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
-            if (getCookie("address")===web3.eth.defaultAccount) {
+            if (getCookie("address") === web3.eth.defaultAccount) {
                 header = "GameMaster"
-            } else  {
+            } else {
                 header = String(player[1]);
             }
-            
+
             return web3.eth.getBalance(getCookie("address"))
         })
         .then(bal => {
@@ -66,8 +66,10 @@ accLoad.then(function () {
                             fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals)
                         })
                 }
+            }).then(() =>{
+                $("#gamePlan").show();
             })
-        $("#gamePlan").show();
+     
     }
 
     function fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals) {
