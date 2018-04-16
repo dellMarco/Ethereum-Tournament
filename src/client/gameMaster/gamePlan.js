@@ -3,7 +3,12 @@ accLoad.then(function () {
 
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
-            header = String(player[1]);
+            if (getCookie("address")===web3.eth.defaultAccount) {
+                header = "GameMaster"
+            } else  {
+                header = String(player[1]);
+            }
+            
             return web3.eth.getBalance(getCookie("address"))
         })
         .then(bal => {
