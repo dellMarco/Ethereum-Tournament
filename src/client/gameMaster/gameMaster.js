@@ -2,26 +2,23 @@
 
 accLoad.then(function () {
 
-    //check Cookie and PW
-    if (getCookie("address") === web3.eth.defaultAccount) {
-        console.log("GameMaster")
-    } else {
-        if (prompt("Passwort eingeben") == getPW()) {
-            document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
-        } else {
-            window.location = "../player/index.html";
-        }
-    }
-
-    //setHeader
-    web3.eth.getBalance(web3.eth.defaultAccount)
-        .then(bal => {
-            var eth = parseFloat(web3.utils.fromWei(bal, 'ether'))
-            $("#user").html("GameMaster | " + eth.toFixed(4) + " ETH")
-        }
-        );
-
-    loadData();
+    FIFA.methods.getTournament().call()
+        .then(tournament => {
+            if (tournament[4]) {
+                //check Cookie and PW
+                if (getCookie("address") === web3.eth.defaultAccount) {
+                    console.log("GameMaster")
+                    loadData();
+                } else {
+                    if (prompt("Passwort eingeben") == getPW()) {
+                        loadData();
+                        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
+                    } else {
+                        window.location = "../player/index.html";
+                    }
+                }
+            }
+        })
 
     $("#rumble").on("click", function () {
         FIFA.methods.startTournament().send(
@@ -37,7 +34,6 @@ accLoad.then(function () {
                 console.log("todo: location")
                 //window.open("gamePlan.html", '_blank')
             })
-
     });
 
     $("button").addClass("button");
@@ -73,7 +69,6 @@ accLoad.then(function () {
                 location.reload();
             }
             )
-
     });
 
     $("#reset").on("click", function () {
@@ -190,6 +185,13 @@ accLoad.then(function () {
                 console.error(error);
             }
         });
+        //setHeader
+        web3.eth.getBalance(web3.eth.defaultAccount)
+            .then(bal => {
+                var eth = parseFloat(web3.utils.fromWei(bal, 'ether'))
+                $("#user").html("GameMaster | " + eth.toFixed(4) + " ETH")
+            }
+            );
     }
 
 });
