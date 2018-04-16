@@ -1,9 +1,17 @@
 
-$(document).ready(function () {
+
+accLoad.then(function () {
     /* if (getCookie("address") !== "") {
         alert("Der Game Master kann nicht selbst mitspielen!")
         window.location = "../gameMaster/gamePlan.html";
     } */
+
+    //check Cookie and PW
+    if (getCookie("address") != "") {
+        // window.location = "../gameMaster/gamePlan.html"
+    }
+
+
     var fee = null;
 
     FIFA.methods.getTournament().call(function (error, result) {
@@ -42,10 +50,11 @@ $(document).ready(function () {
 
     function addUser() {
         let name;
+        let count;
 
         FIFA.methods.getPlayerCount().call()
             .then(pCount => {
-                var count = pCount * 1 + 1;
+                count = pCount * 1 + 1;
                 name = $("#name").val()
                 return FIFA.methods.register(name).send(
                     {
@@ -68,8 +77,9 @@ $(document).ready(function () {
                 })
             })
             .then(() => {
-
-                console.log(name + " registriert")
+                document.cookie = "address=" + allAccounts[count] + ";path=/";
+                window.location = "../gameMaster/gamePlan.html"
+                console.log(" " + name + " registriert")
             })
 
     }

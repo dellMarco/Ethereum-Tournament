@@ -1,8 +1,18 @@
-$(document).ready(function () {
+accLoad.then(function () {
+    let header;
 
-    $("#user").html("Test");
+    FIFA.methods.getPlayer(getCookie("address")).call()
+        .then(player => {
+            header = $("#user").html(player[1]);
+            return web3.eth.getBalance(getCookie("address"))
+        })
+        .then(bal => {
+            var eth = parseFloat(web3.utils.fromWei(bal, 'ether'));
+            header = header + " | " + String(eth);
+        })
+
     $("#gamePlan").hide();
-    
+
     FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
             if (parsed[5] == true) {
@@ -75,7 +85,8 @@ $(document).ready(function () {
         if (p1Goals != 0) { cell6.innerHTML = p1Goals }
         if (p2Goals != 0) { cell7.innerHTML = p2Goals }
         if (p1Goals > p2Goals) {
-            cell8.innerHTML = "Spieler 1"}
+            cell8.innerHTML = "Spieler 1"
+        }
         else if (p2Goals > p1Goals) {
             cell8.innerHTML = "Spieler 2"
         }
