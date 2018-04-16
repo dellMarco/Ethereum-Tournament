@@ -17,7 +17,7 @@ accLoad.then(function () {
     web3.eth.getBalance(web3.eth.defaultAccount)
         .then(bal => {
             var eth = parseFloat(web3.utils.fromWei(bal, 'ether'))
-            $("#user").html("GameMaster | " + eth.toFixed(2) + " ETH")
+            $("#user").html("GameMaster | " + eth.toFixed(4) + " ETH")
         }
         );
 

@@ -3,12 +3,13 @@ accLoad.then(function () {
 
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
-            header = $("#user").html(player[1]);
+            header = String(player[1]);
             return web3.eth.getBalance(getCookie("address"))
         })
         .then(bal => {
             var eth = parseFloat(web3.utils.fromWei(bal, 'ether'));
-            header = header + " | " + String(eth);
+            header += " | " + eth.toFixed(4) + " ETH";
+            $("#user").html(header);
         })
 
     $("#gamePlan").hide();
@@ -20,7 +21,6 @@ accLoad.then(function () {
 
             } else {
                 console.log("Not yet started")
-
             }
         } else {
             console.log(error)
