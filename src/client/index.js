@@ -19,17 +19,6 @@ $.ajax({
 	error: console.error
 });
 
-/* $.ajax({
-	url: '/api/users/2',
-	async: false,
-	success: function (res) {
-		//do what now?
-	},
-	error: console.error
-});
- */
-
-
 //Get CMC Data
 function Get(yourUrl) {
 	const Httpreq = new XMLHttpRequest();

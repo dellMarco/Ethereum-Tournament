@@ -46,7 +46,6 @@ $(document).ready(function () {
             .then(pCount => {
                 var count = pCount * 1 + 1;
                 name = $("#name").val()
-                console.log(name)
                 return FIFA.methods.register(name).send(
                     {
                         from: allAccounts[count],
@@ -59,15 +58,16 @@ $(document).ready(function () {
                     method: "POST",
                     async: false,
                     success: function (res) {
-                        console.log(res)
                     },
                     error: console.error,
                     data: JSON.stringify({
                         username: name,
-                        password: '1234'
                     }),
                     contentType: 'application/json'
                 })
+            })
+            .then(() => {
+                
                 console.log(name + " registriert")
             })
 

@@ -1,4 +1,17 @@
+
+
 $(document).ready(function () {
+
+
+    if (getCookie("address") === web3.eth.defaultAccount) {
+        console.log("GameMaster")
+    } else {
+        if (prompt("Passwort eingeben") == getPW()) {
+            document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
+        } else {
+            window.location = "../player/index.html";
+        }
+    }
 
     $("button").addClass("button");
 
@@ -9,13 +22,16 @@ $(document).ready(function () {
             { from: web3.eth.defaultAccount },
             (function (err, res) {
                 if (!err) {
-
                     console.log("Successsfully started Tournament")
                 } else {
-                    console.log(err)
+                    console.log("asd: " + err)
                 }
-            }));
-        //window.open("gamePlan.html", '_blank')
+            }))
+        .then(() => {
+            console.log("todo: location")
+            //window.open("gamePlan.html", '_blank')
+        })
+        
     });
 
     $("#start").on("click", function () {
@@ -102,7 +118,6 @@ $(document).ready(function () {
 
     function setGameMaster() {
         document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
-        document.cookie = 
 
         $.ajax({
             url: '/api/users',
@@ -114,10 +129,24 @@ $(document).ready(function () {
             error: console.error,
             data: JSON.stringify({
                 username: "GameMaster",
-                password: "123pass"
+                password: "pass123"
             }),
             contentType: 'application/json'
         });
+    }
+
+    function getPW() {
+        let pw;
+        $.ajax({
+            url: '/api/users/0',
+            async: false,
+            success: function (res) {
+
+                pw = res.password;
+            },
+            error: console.error
+        });
+        return (pw)
     }
 
     function loadData() {
