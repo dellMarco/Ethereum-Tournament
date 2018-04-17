@@ -1,14 +1,17 @@
 accLoad.then(function () {
     let header;
+    let playerID;
 
+    //set header
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
             if (getCookie("address") === web3.eth.defaultAccount) {
                 header = "GameMaster"
+                $("#end").show()
             } else {
-                header = String(player[1]);
+                header = "#"+player[0]+" "+String(player[1]);
+                playerID = player[0];
             }
-
             return web3.eth.getBalance(getCookie("address"))
         })
         .then(bal => {
@@ -16,8 +19,6 @@ accLoad.then(function () {
             header += " | " + eth.toFixed(4) + " ETH";
             $("#user").html(header);
         })
-
-    $("#gamePlan").hide();
 
     FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
@@ -64,6 +65,7 @@ accLoad.then(function () {
                             p1Goals = enc[2]
                             p2Goals = enc[3]
                             fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals)
+                            sortTable();
                         })
                 }
             }).then(() =>{
@@ -71,6 +73,7 @@ accLoad.then(function () {
             })
      
     }
+
 
     function fillTable(gameNumber, p1, p1Name, p2, p2Name, p1Goals, p2Goals) {
         var table = document.getElementById("gameTable");
@@ -83,6 +86,10 @@ accLoad.then(function () {
         var cell6 = row.insertCell(5);
         var cell7 = row.insertCell(6);
         var cell8 = row.insertCell(7);
+
+        if (p1===playerID || p2 === playerID){
+            row.style.backgroundColor =  "var(--color-co-yellow)";
+        }
         cell1.innerHTML = gameNumber;
         cell2.innerHTML = p1
         cell3.innerHTML = p1Name
@@ -154,4 +161,38 @@ accLoad.then(function () {
         })
     }
 
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("gamePlan");
+        switching = true;
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+          // Start by saying: no switching is done:
+          switching = false;
+          rows = table.getElementsByTagName("TR");
+          /* Loop through all table rows (except the
+          first, which contains table headers): */
+          for (i = 1; i < (rows.length - 1); i++) {
+            // Start by saying there should be no switching:
+            shouldSwitch = false;
+            /* Get the two elements you want to compare,
+            one from current row and one from the next: */
+            x = rows[i].getElementsByTagName("TD")[0];
+            y = rows[i + 1].getElementsByTagName("TD")[0];
+            // Check if the two rows should switch place:
+            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+              // I so, mark as a switch and break the loop:
+              shouldSwitch= true;
+              break;
+            }
+          }
+          if (shouldSwitch) {
+            /* If a switch has been marked, make the switch
+            and mark that a switch has been done: */
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+          }
+        }
+      }
 });

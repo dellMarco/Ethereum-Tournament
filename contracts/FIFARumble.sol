@@ -14,9 +14,6 @@ contract FIFARumble {
     struct Player {
         uint pID;
         string name;
-        uint points;
-        uint goals;
-        uint counterGoals;
     }
 
     struct Encounter {
@@ -159,49 +156,28 @@ contract FIFARumble {
         playerAccts.push(tempAddress);
     }
 
-    // function setPoints(address _address, uint _points, uint _goals, uint _counterGoals) gameMasterOnly internal {
-    //     Player storage player = players[_address];
-    //     player.points = player.points + _points;
-    //     player.goals = player.goals + _goals;
-    //     player.counterGoals = player.counterGoals + _counterGoals;
-    // }
-
     function getPlayerCount() public constant returns(uint count) {
         return playerAccts.length;
     }
 
     function getPlayer(address _playerAddress) view public returns (
         uint pID,
-        string name,
-        uint points,
-        uint goals,
-        uint counterGoals)
+        string name)
         {
 
         return (
             players[_playerAddress].pID,
-            players[_playerAddress].name,
-            players[_playerAddress].points,
-            players[_playerAddress].goals,
-            players[_playerAddress].counterGoals);
+            players[_playerAddress].name);
     }
 
     function getPlayerByID(uint _playerID) view public returns (
         address addressP,
-        string name,
-        uint points,
-        uint goals,
-        uint counterGoals)
+        string name)
         {
-
-        addressP = (playerIDs[_playerID]);
-        
+        addressP = (playerIDs[_playerID]);     
         return (
             addressP,
-            players[addressP].name,
-            players[addressP].points,
-            players[addressP].goals,
-            players[addressP].counterGoals);
+            players[addressP].name);
 
     }
 

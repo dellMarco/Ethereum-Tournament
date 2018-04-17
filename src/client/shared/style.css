@@ -68,7 +68,7 @@ th {
 }
 
 table tr:hover{
-  background-color: var(--color-co-yellow);;
+  background-color: var(--color-co-yellow);
 }
 
 input {

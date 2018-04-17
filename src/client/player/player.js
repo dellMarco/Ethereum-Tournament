@@ -1,13 +1,16 @@
 
 
 accLoad.then(function () {
-    /* if (getCookie("address") !== "") {
+    $('input').val('');
+    if (getCookie("address") === web3.eth.defaultAccount) {
         alert("Der Game Master kann nicht selbst mitspielen!")
-        window.location = "../gameMaster/gamePlan.html";
-    } */
+        alert("todo: einkommentieren windows.location")
+        //window.location = "../gameMaster/index.html";
+    }
 
     //check Cookie and PW
     if (getCookie("address") != "") {
+        alert("todo: einkommentieren windows.location")
         // window.location = "../gameMaster/gamePlan.html"
     }
 

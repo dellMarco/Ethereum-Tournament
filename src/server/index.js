@@ -5,15 +5,6 @@ const Web3 = require('web3');
 const bodyParser = require('body-parser');
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
-
-// const acc = function (err, res) {
-//     if (!err) {
-
-//     } else {
-
-//     }
-// }
-
 let FIFARumble;
 let FIFA;
 

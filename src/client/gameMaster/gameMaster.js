@@ -2,10 +2,10 @@
 
 accLoad.then(function () {
 
+    //check Cookie and PW
     FIFA.methods.getTournament().call()
         .then(tournament => {
             if (tournament[4]) {
-                //check Cookie and PW
                 if (getCookie("address") === web3.eth.defaultAccount) {
                     console.log("GameMaster")
                     loadData();
@@ -14,8 +14,14 @@ accLoad.then(function () {
                         loadData();
                         document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
                     } else {
-                        window.location = "../player/index.html";
+                        //window.location = "../player/index.html";
                     }
+                }
+            } else if (tournament[5]) {
+                $('#rumble').prop("disabled", true);
+                $('#start').prop("disabled", true);
+                if (confirm("Turnier läuft, zum Spielplan wechseln?")) {
+                    window.location = "../gameMaster/gameplan.html";
                 }
             }
         })
@@ -27,11 +33,11 @@ accLoad.then(function () {
                 if (!err) {
                     console.log("Successsfully started Tournament")
                 } else {
-                    console.log("asd: " + err)
+                    console.log(err)
                 }
             }))
             .then(() => {
-                console.log("todo: location")
+                alert("todo: location")
                 //window.open("gamePlan.html", '_blank')
             })
     });
@@ -72,7 +78,7 @@ accLoad.then(function () {
     });
 
     $("#reset").on("click", function () {
-        //document.cookie = "address=" + web3.eth.defaultAccount + ";path=/"
+        document.cookie = "address=;path=/"
     });
 
     $("#fee").on("keyup", function () {
