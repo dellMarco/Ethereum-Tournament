@@ -1,13 +1,14 @@
 accLoad.then(function () {
     let header;
     let playerID;
+    let gameMaster;
 
     //set header
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
             if (getCookie("address") === web3.eth.defaultAccount) {
                 header = "GameMaster"
-                $("#end").show()
+                gameMaster = true;
             } else {
                 header = "#" + player[0] + " " + String(player[1]);
                 playerID = player[0];
@@ -22,9 +23,8 @@ accLoad.then(function () {
 
     FIFA.methods.getTournament().call(function (error, parsed) {
         if (!error) {
-            if (parsed[5] == true) {
+            if (parsed[5] === true) {
                 start()
-
             } else {
                 console.log("Not yet started")
             }
@@ -34,6 +34,7 @@ accLoad.then(function () {
     })
 
     function start() {
+        gameMaster ? $("#end").show() : null;
         $("#loading").hide();
         $("#gamePlan").show();
         FIFA.methods.getRoundRobin().call()
@@ -197,7 +198,7 @@ accLoad.then(function () {
     }
 
     $("#end").on("click", function () {
-        
+
     });
 
 });
