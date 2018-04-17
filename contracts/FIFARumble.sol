@@ -10,10 +10,16 @@ contract FIFARumble {
     bool registrationOpen;
     bool tournamentStarted;
     address public gameMaster;
+    address public winner;
+    address public second;
+    address public third;
 
     struct Player {
         uint pID;
         string name;
+        uint points;
+        uint goals;
+        uint counterGoals;
     }
 
     struct Encounter {
@@ -50,7 +56,6 @@ contract FIFARumble {
         _;
     }
 
-
     //fee in ETH
     function createTournament(uint _fee, uint _maxPlayers, string _tournamentName) external gameMasterOnly {
         registrationOpen = true;
@@ -68,6 +73,22 @@ contract FIFARumble {
     function getTournament() external view returns (string, uint, uint, uint, bool, bool) {
         uint i = getPlayerCount();
         return (tournamentName, fee, maxPlayers, i, registrationOpen, tournamentStarted);
+    }
+
+    function setPoints(address _address, uint _points, uint _goals, uint _counterGoals) gameMasterOnly internal {
+        Player storage player = players[_address];
+        player.points = player.points + _points;
+        player.goals = player.goals + _goals;
+        player.counterGoals = player.counterGoals + _counterGoals;
+    }
+
+    function endTournament() public gameMasterOnly {
+        tournamentStarted = false;
+
+        for (uint i = 0; i < getNumberOfMatches(); i++) {
+            getEncounter(i);
+            // if ()
+        }
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
@@ -109,14 +130,14 @@ contract FIFARumble {
     }
 
     function decideMatch(uint _matchID, uint _p1, uint _p2, uint _p1Goals, uint _p2Goals) gameMasterOnly external {
+        if (tournamentStarted) {
+            Encounter storage en = encounters[_matchID];
 
-        Encounter storage en = encounters[_matchID];
-
-        en.p1ID = _p1;
-        en.p2ID = _p2;
-        en.p1Goals = _p1Goals;
-        en.p2Goals = _p2Goals;
-
+            en.p1ID = _p1;
+            en.p2ID = _p2;
+            en.p1Goals = _p1Goals;
+            en.p2Goals = _p2Goals;
+        }
     }
     ////player functions////
 
@@ -162,22 +183,34 @@ contract FIFARumble {
 
     function getPlayer(address _playerAddress) view public returns (
         uint pID,
-        string name)
+        string name,
+        uint points,
+        uint goals,
+        uint counterGoals)
         {
 
         return (
             players[_playerAddress].pID,
-            players[_playerAddress].name);
+            players[_playerAddress].name,
+            players[_playerAddress].points,
+            players[_playerAddress].goals,
+            players[_playerAddress].counterGoals);
     }
 
     function getPlayerByID(uint _playerID) view public returns (
         address addressP,
-        string name)
+        string name,
+        uint points,
+        uint goals,
+        uint counterGoals)
         {
         addressP = (playerIDs[_playerID]);     
         return (
             addressP,
-            players[addressP].name);
+            players[addressP].name,
+            players[addressP].points,
+            players[addressP].goals,
+            players[addressP].counterGoals);
 
     }
 
