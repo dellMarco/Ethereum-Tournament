@@ -20,16 +20,22 @@ accLoad.then(function () {
             if (getCookie("address") === web3.eth.defaultAccount) {
                 header = "GameMaster"
                 gameMaster = true;
-            } else {
+                return web3.eth.getBalance(getCookie("address"))
+            } else if (getCookie("address") !== "") {
                 header = "#" + player[0] + " " + String(player[1]);
                 playerID = player[0];
+                return web3.eth.getBalance(getCookie("address"))
+            } else {
+                return ""
             }
-            return web3.eth.getBalance(getCookie("address"))
+
         })
         .then(bal => {
-            var eth = parseFloat(web3.utils.fromWei(bal, 'ether'));
-            header += " | " + eth.toFixed(4) + " ETH";
-            $("#user").html(header);
+            if (bal !== "") {
+                var eth = parseFloat(web3.utils.fromWei(bal, 'ether'));
+                header += " | " + eth.toFixed(4) + " ETH";
+                $("#user").html(header);
+            }
         })
 
     FIFA.methods.getTournament().call(function (error, parsed) {
