@@ -1,3 +1,4 @@
+
 accLoad.then(function () {
     let header;
     let playerID;
@@ -51,7 +52,7 @@ accLoad.then(function () {
     })
 
     function start() {
-        gameMaster ? $("#end").show() : null;
+        gameMaster ? $("#gamePlan").show() : null;
         $("#loading").hide();
         $("#gamePlan").show();
         FIFA.methods.getRoundRobin().call()
@@ -174,7 +175,8 @@ accLoad.then(function () {
 
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
     function decide(mID, wID, lID, p1W, p2G) {
-        FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).send({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {
+        console.log(mID + ":" + wID+ ":" + lID+ ":" + p1W+ ":" + p2G+":")
+        FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).s({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {
             if (!err) {
                 console.log("Success")
             } else {
@@ -203,7 +205,7 @@ accLoad.then(function () {
                 x = rows[i].getElementsByTagName("TD")[0];
                 y = rows[i + 1].getElementsByTagName("TD")[0];
                 // Check if the two rows should switch place:
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
                     // I so, mark as a switch and break the loop:
                     shouldSwitch = true;
                     break;
@@ -218,8 +220,30 @@ accLoad.then(function () {
         }
     }
 
-    $("#end").on("click", function () {
+    function endT() {
+        FIFA.methods.getPlayerCount().call()
+        .then(pCount => {
+            var arr = [];
 
+            for (let j = 1; j <= pCount; j++) {
+                
+                FIFA.methods.getPlayerByID(j).call()
+                .then(p1 => {
+                    arr.push([p1[0],p1[2]])
+                }
+                )
+               
+                
+            }
+
+        })
+        .then(() =>{
+            console.log(arr)
+        })
+    }
+
+    $("#end").on("click", function () {
+        endT();
     });
 
 });

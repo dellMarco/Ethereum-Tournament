@@ -1,6 +1,10 @@
 
 
 accLoad.then(function () {
+   
+    let inital = true;
+    loadT();
+
     $('input').val('');
     if (getCookie("address") === web3.eth.defaultAccount) {
         alert("Der Game Master kann nicht selbst mitspielen!")
@@ -14,33 +18,45 @@ accLoad.then(function () {
         // window.location = "../gameMaster/gamePlan.html"
     }
 
+    /*    FIFA.events.newRegister(newCount => {
+           location.reload;
+           console.log(newCount)
+       })
+    */
+    FIFA.events.newRegister(function (err, res) {
+        loadT()
+    })
 
     var fee = null;
 
-    FIFA.methods.getTournament().call(function (error, result) {
-        if (!error) {
-            if (result[0] != "") {
-                document.getElementById("opener").disabled = false;
-                fee = result[1];
-                rotate();
-                $("#tournament").html(result[0]);
+    function loadT() {
+        FIFA.methods.getTournament().call(function (error, result) {
+            if (!error) {
+                if (result[0] != "") {
+                    document.getElementById("opener").disabled = false;
+                    fee = result[1];
+                    inital ? rotate() : null;
+                    $("#tournament").html(result[0]);
 
-                if (parseInt(result[3]) === parseInt(result[2])) {
-                    $("#tournamentCount").html("Alle " + result[2] + " Plätze sind belegt!");
-                    document.getElementById("opener").disabled = true;
+                    if (parseInt(result[3]) === parseInt(result[2])) {
+                        $("#tournamentCount").html("Alle " + result[2] + " Plätze sind belegt!");
+                        document.getElementById("opener").disabled = true;
+                    } else {
+                        $("#tournamentCount").html(result[3] + " von " + result[2] + " Plätzen belegt!");
+                    }
                 } else {
-                    $("#tournamentCount").html(result[3] + " von " + result[2] + " Plätzen belegt!");
+                    document.getElementById("opener").disabled = true;
+                    $("#tournament").html("KEIN TURNIER GESTARTET!");
+                    $("#tournamentCount").html("Bitte wende dich an den Game Master.");
                 }
-            } else {
-                document.getElementById("opener").disabled = true;
-                $("#tournament").html("KEIN TURNIER GESTARTET!");
-                $("#tournamentCount").html("Bitte wende dich an den Game Master.");
-            }
 
-        }
-        else
-            console.error(error);
-    });
+            }
+            else
+                console.error(error);
+        });
+        inital = false;
+    }
+
     $("#opener").on("click", function () {
         if ($("#name").val() == "") {
             $("#name").effect("shake");
@@ -81,7 +97,8 @@ accLoad.then(function () {
             })
             .then(() => {
                 document.cookie = "address=" + allAccounts[count] + ";path=/";
-                window.location = "../gameMaster/gamePlan.html"
+                alert("todo: location einkommentieren")
+                // window.location = "../gameMaster/gamePlan.html"
                 console.log(" " + name + " registriert")
             })
 

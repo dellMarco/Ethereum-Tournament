@@ -39,8 +39,6 @@ expressWs.onopen = function () {
     expressWs.send('connected')
 }
 web3.setProvider('ws://127.0.0.1:7545');
-
-
 web3.eth.getAccounts()
     .then(accounts => {
         const content = fs.readFileSync(path.join(__dirname, '..', '..', 'build', 'contracts', 'FIFARumble.json'), 'utf8');

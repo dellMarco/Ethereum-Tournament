@@ -35,11 +35,10 @@ contract FIFARumble {
     mapping (uint=>address) playerIDs;
     address[] playerAccts;
        
-    event InsufficientFee(uint missing);
-    event FeeToHigh(uint spare);
-    event TournamentFull(uint mP);
+    event newRegister();
     event Start(); 
     event MatchDecided(Encounter);
+    event End();
    
      ////modifiers////
     modifier gameMasterOnly {
@@ -63,6 +62,7 @@ contract FIFARumble {
         fee = _fee;
         maxPlayers = _maxPlayers;
         tournamentName = _tournamentName;
+        emit newRegister();
     }
     
     function startTournament() public gameMasterOnly {
@@ -85,11 +85,11 @@ contract FIFARumble {
 
     function endTournament() public gameMasterOnly {
         tournamentStarted = false;
-
-        for (uint i = 0; i < getNumberOfMatches(); i++) {
+        emit End();
+        /* for (uint i = 0; i < getPlayerCount(); i++) {
             getEncounter(i);
             // if ()
-        }
+        } */
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
@@ -152,28 +152,24 @@ contract FIFARumble {
 
     ////player functions////
 
-    function register(string _playerName) playerOnly registrationValid external payable returns(bool reg) {
+    function register(string _playerName) playerOnly registrationValid external payable {
 
         if (getPlayerCount() >= maxPlayers) {
-            emit TournamentFull(maxPlayers);
             revert();
         }
 
         if (msg.value == fee) {
             setPlayer(_playerName);
-            reg = true;
-            return reg;
-
+            emit newRegister();
+   
         } else if (msg.value < fee) {
-            emit InsufficientFee(fee - msg.value);
             revert();
 
         } else if (msg.value > fee) {
             msg.sender.transfer(msg.value - fee);
-            emit FeeToHigh(msg.value - fee);
             setPlayer(_playerName);
-            reg = true;
-            return reg;
+            emit newRegister();
+    
         }       
     }
 
