@@ -133,7 +133,7 @@ accLoad.then(function () {
             method: 'POST',
             async: false,
             success: function (res) {
-                console.log(res)
+                
             },
             error: console.error,
             data: JSON.stringify({

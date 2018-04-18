@@ -144,8 +144,8 @@ contract FIFARumble {
                 setPoints(p1, 3, _p1Goals, _p2Goals);
                 setPoints(p2, 0, _p2Goals, _p1Goals);
             } else if (_p1Goals < _p2Goals) {
-                setPoints(p2, 3, _p1Goals, _p2Goals);
-                setPoints(p1, 0, _p2Goals, _p1Goals);
+                setPoints(p2, 3, _p2Goals, _p1Goals);
+                setPoints(p1, 0, _p1Goals, _p2Goals);
             }
         }
     }

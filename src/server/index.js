@@ -3,13 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const Web3 = require('web3');
 const bodyParser = require('body-parser');
-
+const https = require('https');
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
 
 let FIFARumble;
 let FIFA;
-
 
 const app = express();
 const expressWs = require('express-ws')(app);
@@ -19,6 +18,9 @@ const expressWs = require('express-ws')(app);
     req.testing = 'testing';
     return next();
 }); */
+const staticFilePath = path.join(__dirname, '..', 'client');
+
+app.use(express.static(staticFilePath));
 
 app.get('/', function (req, res, next) {
     console.log('get route', req.testing);
@@ -71,9 +73,7 @@ app.get('/api/contract', (req, res) => {
     });
 });
 
-const staticFilePath = path.join(__dirname, '..', 'client');
 
-app.use(express.static(staticFilePath));
 
 const users = [];
 // POST /api/users gets JSON bodies

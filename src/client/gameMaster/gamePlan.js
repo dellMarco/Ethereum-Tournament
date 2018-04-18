@@ -1,5 +1,6 @@
 
 accLoad.then(function () {
+
     let header;
     let playerID;
     let gameMaster;
@@ -52,7 +53,8 @@ accLoad.then(function () {
     })
 
     function start() {
-        gameMaster ? $("#gamePlan").show() : null;
+        console.log(gameMaster)
+        gameMaster ? $("#end").show() : null;
         $("#loading").hide();
         $("#gamePlan").show();
         FIFA.methods.getRoundRobin().call()
@@ -121,11 +123,11 @@ accLoad.then(function () {
             cell7.setAttribute(a, 'true');
         }
 
-        if (p1Goals != 0) {
+        if (p1Goals != "") {
             cell6.innerHTML = p1Goals
             cell6.setAttribute(a, 'false');
         }
-        if (p2Goals != 0) {
+        if (p2Goals != "") {
             cell7.innerHTML = p2Goals
             cell7.setAttribute(a, 'false');
         }
@@ -144,8 +146,8 @@ accLoad.then(function () {
             var mID = this.cells[0].innerHTML * 1
             if (p1g < p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
-                if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
-                    decide(mID, p2ID, p1ID, p1g, p2g)
+                if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain ENDGÜLTIG speichern? ")) {
+                    decide(mID, p1ID, p2ID, p2g, p1g)
                     this.cells[5].setAttribute(a, 'false');
                     this.cells[6].setAttribute(a, 'false');
                     this.cells[7].innerHTML = "Spieler 2"
@@ -156,10 +158,10 @@ accLoad.then(function () {
                 }
             } else if (p1g > p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
-                if (confirm("Spieler 1 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
+                if (confirm("Spieler 1 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain ENDGÜLTIG speichern? ")) {
                     decide(mID, p1ID, p2ID, p1g, p2g)
-                    this.cells[5].setAttribute("contenteditable", 'false');
-                    this.cells[6].setAttribute("contenteditable", 'false');
+                    this.cells[5].setAttribute(a, 'false');
+                    this.cells[6].setAttribute(a, 'false');
                     this.cells[7].innerHTML = "Spieler 1"
                 } else {
                     this.cells[5].innerHTML = ""
@@ -175,8 +177,8 @@ accLoad.then(function () {
 
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
     function decide(mID, wID, lID, p1W, p2G) {
-        console.log(mID + ":" + wID+ ":" + lID+ ":" + p1W+ ":" + p2G+":")
-        FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).s({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {
+
+        FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).send({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {
             if (!err) {
                 console.log("Success")
             } else {
@@ -222,24 +224,24 @@ accLoad.then(function () {
 
     function endT() {
         FIFA.methods.getPlayerCount().call()
-        .then(pCount => {
-            var arr = [];
+            .then(pCount => {
+                var arr = [];
 
-            for (let j = 1; j <= pCount; j++) {
-                
-                FIFA.methods.getPlayerByID(j).call()
-                .then(p1 => {
-                    arr.push([p1[0],p1[2]])
+                for (let j = 1; j <= pCount; j++) {
+
+                    FIFA.methods.getPlayerByID(j).call()
+                        .then(p1 => {
+                            arr.push([j, p1[2]])
+                        }
+                        )
+
+
                 }
-                )
-               
-                
-            }
+                console.log(arr)
+            })
+            .then(() => {
 
-        })
-        .then(() =>{
-            console.log(arr)
-        })
+            })
     }
 
     $("#end").on("click", function () {

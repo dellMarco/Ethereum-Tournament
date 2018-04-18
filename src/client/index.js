@@ -1,4 +1,4 @@
-var web3 = new Web3(new Web3.providers.HttpProvider("ws://127.0.0.1:7545"));
+var web3 = new Web3(new Web3.providers.HttpProvider("//localhost:7545"));
 web3.setProvider('ws://127.0.0.1:7545');
 
 
