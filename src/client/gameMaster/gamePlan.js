@@ -87,6 +87,7 @@ accLoad.then(function () {
         var cell6 = row.insertCell(5);
         var cell7 = row.insertCell(6);
         var cell8 = row.insertCell(7);
+        var a = "contenteditable";
 
         if (p1 === playerID || p2 === playerID) {
             row.style.backgroundColor = "var(--color-co-yellow)";
@@ -97,27 +98,26 @@ accLoad.then(function () {
         cell4.innerHTML = p2
         cell5.innerHTML = p2Name
 
-        if (p1Goals != 0) { cell6.innerHTML = p1Goals }
-        if (p2Goals != 0) { cell7.innerHTML = p2Goals }
+        if (getCookie("address") == web3.eth.defaultAccount) {
+            cell6.setAttribute(a, 'true');
+            cell7.setAttribute(a, 'true');
+        }
+        
+        if (p1Goals != 0) {
+            cell6.innerHTML = p1Goals
+            cell6.setAttribute(a, 'false');
+        }
+        if (p2Goals != 0) {
+            cell7.innerHTML = p2Goals
+            cell7.setAttribute(a, 'false');
+        }
         if (p1Goals > p2Goals) {
             cell8.innerHTML = "Spieler 1"
         }
         else if (p2Goals > p1Goals) {
             cell8.innerHTML = "Spieler 2"
-        }
+        }     
 
-        var a = "contenteditable";
-        row.addEventListener("click", (
-            function () {
-
-                if (getCookie("address") == web3.eth.defaultAccount) {
-                    this.cells[5].setAttribute(a, 'true');
-                    this.cells[6].setAttribute(a, 'true');
-                } else {
-                    alert("Nur der Game Master kann Spielstände eintragen!")
-                }
-
-            }));
         row.addEventListener('keyup', function () {
             var p1ID = this.cells[1].innerHTML * 1
             var p1g = parseInt(this.cells[5].innerHTML)
@@ -128,6 +128,8 @@ accLoad.then(function () {
 
                 if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
                     decide(mID, p2ID, p1ID, p1g, p2g)
+                    this.cells[5].setAttribute(a, 'false');
+                    this.cells[6].setAttribute(a, 'false');
                     this.cells[7].innerHTML = "Spieler 2"
                 } else {
                     this.cells[5].innerHTML = ""
@@ -138,7 +140,8 @@ accLoad.then(function () {
 
                 if (confirm("Spieler 1 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain speichern? ")) {
                     decide(mID, p1ID, p2ID, p1g, p2g)
-
+                    this.cells[5].setAttribute("contenteditable", 'false');
+                    this.cells[6].setAttribute("contenteditable", 'false');
                     this.cells[7].innerHTML = "Spieler 1"
                 } else {
                     this.cells[5].innerHTML = ""
@@ -151,6 +154,7 @@ accLoad.then(function () {
 
         })
     }
+
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
     function decide(mID, wID, lID, p1W, p2G) {
         FIFA.methods.decideMatch(mID, wID, lID, (p1W * 1), (p2G * 1)).send({ from: web3.eth.defaultAccount, gas: 3000000 }, function (err, res) {

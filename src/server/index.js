@@ -49,7 +49,6 @@ const users = [];
 app.post('/api/users', bodyParser.json(), function (req, res) {
     if (!req.body) return res.sendStatus(400)
     const u = users[users.length - 1];
-    console.log(req.body);
     req.body.id = u ? u.id + 1 : 0;
     users.push(req.body);
     res.status(201).json(req.body);

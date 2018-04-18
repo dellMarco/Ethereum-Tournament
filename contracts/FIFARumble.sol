@@ -27,6 +27,7 @@ contract FIFARumble {
         uint p2ID;
         uint p1Goals;
         uint p2Goals;
+        bool isValue;
     }
 
     mapping (uint=>Encounter) encounters;
@@ -125,20 +126,30 @@ contract FIFARumble {
     }   
 
     function getNumberOfMatches() internal view returns(uint numberOfMatches) {
-        numberOfMatches = getPlayerCount() / 2 * (getPlayerCount() - 1);
+        numberOfMatches = ((getPlayerCount() * 1000 ) / 2 * (getPlayerCount() - 1)) / 1000;
         return numberOfMatches;
     }
 
     function decideMatch(uint _matchID, uint _p1, uint _p2, uint _p1Goals, uint _p2Goals) gameMasterOnly external {
         if (tournamentStarted) {
             Encounter storage en = encounters[_matchID];
-
             en.p1ID = _p1;
             en.p2ID = _p2;
             en.p1Goals = _p1Goals;
             en.p2Goals = _p2Goals;
+            var (p1, , , , ) = getPlayerByID(_p1);
+            var (p2, , , , ) = getPlayerByID(_p2);
+            
+            if (_p1Goals > _p2Goals) {
+                setPoints(p1, 3, _p1Goals, _p2Goals);
+                setPoints(p2, 0, _p2Goals, _p1Goals);
+            } else if (_p1Goals < _p2Goals) {
+                setPoints(p2, 3, _p1Goals, _p2Goals);
+                setPoints(p1, 0, _p2Goals, _p1Goals);
+            }
         }
     }
+
     ////player functions////
 
     function register(string _playerName) playerOnly registrationValid external payable returns(bool reg) {
