@@ -4,9 +4,42 @@ const fs = require('fs');
 const Web3 = require('web3');
 const bodyParser = require('body-parser');
 
+
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
+
 let FIFARumble;
 let FIFA;
+
+
+const app = express();
+const expressWs = require('express-ws')(app);
+
+/* app.use(function (req, res, next) {
+    console.log('middleware');
+    req.testing = 'testing';
+    return next();
+}); */
+
+app.get('/', function (req, res, next) {
+    console.log('get route', req.testing);
+    res.end();
+});
+
+app.ws('/', function (ws, req) {
+    expressWs.on('message', function (msg) {
+        console.log(msg);
+    });
+    console.log('socket', req.testing);
+});
+
+expressWs.onopen = function () {
+    console.log('websocket is connected ...')
+
+    // sending a send event to websocket server
+    expressWs.send('connected')
+}
+web3.setProvider('ws://127.0.0.1:7545');
+
 
 web3.eth.getAccounts()
     .then(accounts => {
@@ -31,7 +64,7 @@ web3.eth.getAccounts()
         }
     }));
 
-const app = express();
+
 
 app.get('/api/contract', (req, res) => {
     res.json({

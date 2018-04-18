@@ -3,6 +3,17 @@ accLoad.then(function () {
     let playerID;
     let gameMaster;
 
+
+    FIFA.events.Start(function (err1, res1) {
+
+        if (!err1) {
+            start();
+        } else {
+            console.log(err1)
+        }
+    });
+
+
     //set header
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
@@ -102,7 +113,7 @@ accLoad.then(function () {
             cell6.setAttribute(a, 'true');
             cell7.setAttribute(a, 'true');
         }
-        
+
         if (p1Goals != 0) {
             cell6.innerHTML = p1Goals
             cell6.setAttribute(a, 'false');
@@ -116,7 +127,7 @@ accLoad.then(function () {
         }
         else if (p2Goals > p1Goals) {
             cell8.innerHTML = "Spieler 2"
-        }     
+        }
 
         row.addEventListener('keyup', function () {
             var p1ID = this.cells[1].innerHTML * 1
