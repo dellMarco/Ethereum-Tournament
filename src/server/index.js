@@ -48,7 +48,6 @@ web3.eth.getAccounts()
         return new web3.eth.Contract(FIFARumble.abi)
             .deploy({
                 data: FIFARumble.bytecode
-                // arguments: web3.eth.getBalance(accounts[0])
             })
             .send({
                 from: accounts[0],
@@ -65,6 +64,8 @@ web3.eth.getAccounts()
         }
     }));
 
+
+
 app.get('/api/contract', (req, res) => {
     res.json({
         abi: FIFARumble.abi,
@@ -72,7 +73,11 @@ app.get('/api/contract', (req, res) => {
     });
 });
 
+
+
 const users = [];
+const winners = [];
+
 // POST /api/users gets JSON bodies
 app.post('/api/users', bodyParser.json(), function (req, res) {
     if (!req.body) return res.sendStatus(400)
@@ -82,8 +87,20 @@ app.post('/api/users', bodyParser.json(), function (req, res) {
     res.status(201).json(req.body);
 })
 
+app.post('/api/winners', bodyParser.json(), function (req, res) {
+    if (!req.body) return res.sendStatus(400)
+    const w = w[w.length - 1];
+    req.body.id = w ? w.id + 1 : 0;
+    w.push(req.body);
+    res.status(201).json(req.body);
+})
+
 app.get('/api/users', (req, res) => {
     res.json(users)
+})
+
+app.get('/api/winners', (req, res) => {
+    res.json(winners)
 })
 
 app.get('/api/users/:id', (req, res) => {
@@ -98,6 +115,19 @@ app.get('/api/users/:id', (req, res) => {
     } else {
         res.status(404).json({
             message: "User not Found"
+        })
+    }
+
+})
+
+app.get('/api/winners/:id', (req, res) => {
+
+    const uFound = winners.find(u => u.id === parseInt(req.params.id))
+    if (uFound) {
+        res.json(uFound)
+    } else {
+        res.status(404).json({
+            message: "not Found"
         })
     }
 

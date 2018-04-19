@@ -1,29 +1,70 @@
 
 accLoad.then(function () {
 
-    let header;
-    let playerID;
     let gameMaster;
+    let user;
+    let playerID;
+    let finished;
 
 
-    FIFA.events.Start(function (err1, res1) {
+    FIFA.events.Start(function (err, res) {
 
-        if (!err1) {
+        if (!err) {
             start();
         } else {
-            console.log(err1)
+            console.log(err)
         }
     });
 
-    //set header
+    FIFA.events.MatchDecided(encounter => {
+        console.log(encounter)
+    })
+
+    FIFA.events.End(function (err, res) {
+        let winner;
+        let second;
+        let third;
+
+        $.ajax({
+            url: '/api/winners',
+            async: false,
+            success: function (res) {
+
+                winners = res.winnerID;
+
+            },
+            error: console.error
+        });
+
+
+        finished = true;
+        /*         $("#result").show();
+                for (let i = 0; i < resultP.length; i++) {
+                    fillTable2(i + 1, resultP[5], resultP[1], resultP[2], resultP[3], resultP[4])
+                } */
+        console.log(playerID + " " + winner + " " + second + " " + third)
+        if (playerID == winner) {
+            alert("Herzlichen Glückwunsch, du bist der Sieger!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[0], 'ether')));
+        }
+
+        if (playerID == second) {
+            alert("Herzlichen Glückwunsch, du bist Zweiter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[1], 'ether')));
+        }
+
+        if (playerID == third) {
+            alert("Herzlichen Glückwunsch, du bist Dritter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[2], 'ether')));
+        }
+
+    })
+
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
             if (getCookie("address") === web3.eth.defaultAccount) {
-                header = "GameMaster"
+                user = "GameMaster"
                 gameMaster = true;
                 return web3.eth.getBalance(getCookie("address"))
             } else if (getCookie("address") !== "") {
-                header = "#" + player[0] + " " + String(player[1]);
+                user = "#" + player[0] + " " + String(player[1]);
                 playerID = player[0];
                 return web3.eth.getBalance(getCookie("address"))
             } else {
@@ -34,8 +75,8 @@ accLoad.then(function () {
         .then(bal => {
             if (bal !== "") {
                 var eth = parseFloat(web3.utils.fromWei(bal, 'ether'));
-                header += " | " + eth.toFixed(4) + " ETH";
-                $("#user").html(header);
+                user += " | " + eth.toFixed(4) + " ETH";
+                $("#user").html(user);
             }
         })
 
@@ -52,7 +93,6 @@ accLoad.then(function () {
     })
 
     function start() {
-        console.log(gameMaster)
         gameMaster ? $("#end").show() : null;
         $("#loading").hide();
         $("#gamePlan").show();
@@ -119,7 +159,6 @@ accLoad.then(function () {
         cell5.innerHTML = p2Name
 
         if (getCookie("address") == web3.eth.defaultAccount) {
-            console.log('true ' + attrEd)
             cell6.setAttribute(attrEd, 'true');
             cell7.setAttribute(attrEd, 'true');
         }
@@ -176,6 +215,28 @@ accLoad.then(function () {
         })
     }
 
+    function fillTable2(rank, id, player, points, goals, cGoals) {
+        var table = document.getElementById("resultTable");
+        var row = table.insertRow();
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3)
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+
+        if (player === playerID) {
+            row.style.backgroundColor = "var(--color-co-yellow)";
+        }
+
+        cell1.innerHTML = rank;
+        cell2.innerHTML = id;
+        cell3.innerHTML = player;
+        cell4.innerHTML = points;
+        cell5.innerHTML = goals;
+        cell6.innerHTML = cGoals;
+    }
+
     //uint _matchID, uint _winner, uint _loser, uint _winnerGoals, uint _loserGoals
     function decide(mID, wID, lID, p1W, p2G) {
 
@@ -199,7 +260,7 @@ accLoad.then(function () {
             switching = false;
             rows = table.getElementsByTagName("TR");
             /* Loop through all table rows (except the
-            first, which contains table headers): */
+            first, which contains table ders): */
             for (i = 1; i < (rows.length - 1); i++) {
                 // Start by saying there should be no switching:
                 shouldSwitch = false;
@@ -249,20 +310,20 @@ accLoad.then(function () {
             .then(players => {
                 console.log(players);
                 players.sort(function (a, b) {
-                    if (a.points < b.points) {
+                    if (parseInt(a.points) < parseInt(b.points)) {
                         return 1;
                     }
 
-                    if (a.points > b.points) {
+                    if (parseInt(a.points) > parseInt(b.points)) {
                         return -1;
                     }
 
-                    if (a.points == b.points) {
-                        if ((a.goals - a.counterGoals) < (b.goals - b.counterGoals)) {
+                    if (parseInt(a.points) == parseInt(b.points)) {
+                        if ((parseInt(a.goals) - parseInt(a.counterGoals)) < (parseInt(b.goals) - parseInt(b.counterGoals))) {
                             return 1;
                         }
 
-                        if ((a.goals - a.counterGoals) > (b.goals - b.counterGoals)) {
+                        if ((parseInt(a.goals) - parseInt(a.counterGoals)) > (parseInt(b.goals) - parseInt(b.counterGoals))) {
                             return -1;
 
                         }
@@ -275,8 +336,28 @@ accLoad.then(function () {
                     }
                     return 0;
                 })
-                console.log(players[0].address + " " + players[1].address + " " + players[2].address)
-                // FIFA.mothods.endTournament(players[0].address, players[1].address, players[2].address).call();
+
+                $.ajax({
+                    url: '/api/winners',
+                    method: "POST",
+                    async: false,
+                    success: function (res) {
+                    },
+                    error: console.error,
+                    data: JSON.stringify({
+                        winnerID: players[0].id,
+                        secondID: players[1].id,
+                        thirdID: players[2].id
+                    }),
+                    contentType: 'application/json'
+                })
+
+                //console.log(players[0].address + " " + players[1].address + " " + players[2].address)
+                FIFA.methods.endTournament(players[0].address, players[1].address, players[2].address).send({
+                    from: web3.eth.defaultAccount,
+                    gas: 1000000
+
+                })
             })
     }
 

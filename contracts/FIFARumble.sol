@@ -6,7 +6,6 @@ pragma solidity ^0.4.18;
 contract FIFARumble {
     uint fee;
     uint maxPlayers;
-    uint initial;
     string tournamentName;
     bool registrationOpen;
     bool tournamentStarted;
@@ -85,21 +84,17 @@ contract FIFARumble {
     }
 
     function endTournament(address _w, address _s, address _t) public gameMasterOnly {
-        tournamentStarted = false;
         winner = _w;
         second = _s;
         third = _t;
 
-        uint feeGM = initial - gameMaster.balance;
-        gameMaster.transfer(feeGM);
-
         uint pot = address(this).balance;
-        uint price1 = pot * 60 / 100;
-        _w.transfer(price1);
-        uint price2 = pot * 30 / 100;
-        _s.transfer(price2);
-        uint price3 = pot * 10 / 100;
-        _t.transfer(price3);
+        uint price1 = (pot * 60 / 100);
+        winner.transfer(price1);
+        uint price2 = (pot * 30 / 100);
+        second.transfer(price2);
+        uint price3 = (pot * 10 / 100);
+        third.transfer(price3);
 
         emit End(price1, price2, price3);
   
@@ -222,7 +217,8 @@ contract FIFARumble {
         string name,
         uint points,
         uint goals,
-        uint counterGoals)
+        uint counterGoals,
+        uint PlayerID)
         {
         addressP = (playerIDs[_playerID]);     
         return (
@@ -230,7 +226,8 @@ contract FIFARumble {
             players[addressP].name,
             players[addressP].points,
             players[addressP].goals,
-            players[addressP].counterGoals);
+            players[addressP].counterGoals,
+            _playerID);
 
     }
 
@@ -249,8 +246,7 @@ contract FIFARumble {
 
     }
 
-    function FIFARumble(uint _initial) public {
-        initial = _initial;
+    function FIFARumble() public {
         gameMaster = msg.sender;
     } 
 
