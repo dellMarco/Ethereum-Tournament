@@ -49,7 +49,7 @@ accLoad.then(function () {
     $("button").addClass("button");
 
     $("#start").on("click", function () {
-        if ($("#name").val() == "") {
+        if ($("#name").val() == "" || $("#name").val() == 1 ) {
             $("#name").effect("shake");
             return;
         }
@@ -104,7 +104,7 @@ accLoad.then(function () {
     var handle = $("#custom-handle");
     $("#slider").slider({
         value: 2,
-        min: 2,
+        min: 3,
         max: 9,
         step: 1,
         create: function () {

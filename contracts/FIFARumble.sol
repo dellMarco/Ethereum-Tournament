@@ -6,6 +6,7 @@ pragma solidity ^0.4.18;
 contract FIFARumble {
     uint fee;
     uint maxPlayers;
+    uint initial;
     string tournamentName;
     bool registrationOpen;
     bool tournamentStarted;
@@ -38,7 +39,7 @@ contract FIFARumble {
     event newRegister();
     event Start(); 
     event MatchDecided(Encounter);
-    event End();
+    event End(uint, uint, uint);
    
      ////modifiers////
     modifier gameMasterOnly {
@@ -83,13 +84,25 @@ contract FIFARumble {
         player.counterGoals = player.counterGoals + _counterGoals;
     }
 
-    function endTournament() public gameMasterOnly {
+    function endTournament(address _w, address _s, address _t) public gameMasterOnly {
         tournamentStarted = false;
-        emit End();
-        /* for (uint i = 0; i < getPlayerCount(); i++) {
-            getEncounter(i);
-            // if ()
-        } */
+        winner = _w;
+        second = _s;
+        third = _t;
+
+        uint feeGM = initial - gameMaster.balance;
+        gameMaster.transfer(feeGM);
+
+        uint pot = address(this).balance;
+        uint price1 = pot * 60 / 100;
+        _w.transfer(price1);
+        uint price2 = pot * 30 / 100;
+        _s.transfer(price2);
+        uint price3 = pot * 10 / 100;
+        _t.transfer(price3);
+
+        emit End(price1, price2, price3);
+  
     }
 
     //for details on tournament systems see: https://en.wikipedia.org/wiki/Category:Tournament_systems 
@@ -236,7 +249,8 @@ contract FIFARumble {
 
     }
 
-    function FIFARumble() public {
+    function FIFARumble(uint _initial) public {
+        initial = _initial;
         gameMaster = msg.sender;
     } 
 

@@ -47,7 +47,8 @@ web3.eth.getAccounts()
         FIFARumble = JSON.parse(content);
         return new web3.eth.Contract(FIFARumble.abi)
             .deploy({
-                data: FIFARumble.bytecode
+                data: FIFARumble.bytecode,
+                arguments: web3.eth.getBalance(accounts[0])
             })
             .send({
                 from: accounts[0],
@@ -64,16 +65,12 @@ web3.eth.getAccounts()
         }
     }));
 
-
-
 app.get('/api/contract', (req, res) => {
     res.json({
         abi: FIFARumble.abi,
         address: FIFA.options.address,
     });
 });
-
-
 
 const users = [];
 // POST /api/users gets JSON bodies

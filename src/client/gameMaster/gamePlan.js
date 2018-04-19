@@ -240,6 +240,7 @@ accLoad.then(function () {
                             player.points = p1[2];
                             player.goals = p1[3];
                             player.counterGoals = p1[4];
+                            player.address = p1[0]
                             return player;
                         })
                     promises.push(promis)
@@ -249,10 +250,34 @@ accLoad.then(function () {
             })
 
             .then(players => {
-                console.log(players)
+                console.log(players);
+                players.sort(function (a, b) {
+                    if (a.points < b.points) {
+                        return 1;
+                    }
+
+                    if (a.points > b.points) {
+                        return -1;
+                    }
+
+                    if (a.points == b.points) {
+                        if ((a.goals - a.counterGoals) < (b.goals - b.counterGoals)) {
+                            return 1;
+                        }
+
+                        if ((a.goals - a.counterGoals) > (b.goals - b.counterGoals)) {
+                            return -1;
+
+                        }
+                        return 0;
+
+                    }
+                    return 0;
+                })
+                
+                FIFA.mothods.endTournament(players[0].address, players[1].address, players[2].address).call();
             })
     }
-
 
     $("#end").on("click", function () {
         endT();

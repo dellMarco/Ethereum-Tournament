@@ -40,7 +40,6 @@ $(document).ready(function () {
 		window.location = "/gameMaster/index.html"
 	});
 
-
 });
 
 function getCookie(cname) {
