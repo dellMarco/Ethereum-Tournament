@@ -124,12 +124,9 @@ accLoad.then(function () {
             cell7.setAttribute(attrEd, 'true');
         }
 
-        if (p1Goals != "") {
+        if (p1Goals != "0" || p2Goals != "0") {
             cell6.innerHTML = p1Goals
             cell6.setAttribute(attrEd, 'false');
-        }
-
-        if (p2Goals != "") {
             cell7.innerHTML = p2Goals
             cell7.setAttribute(attrEd, 'false');
         }
@@ -269,13 +266,17 @@ accLoad.then(function () {
                             return -1;
 
                         }
-                        return 0;
+                        if (confirm("Hat Spieler #" + a.id + " gegen Speiler #" + b.id + " gewonnen?")) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
 
                     }
                     return 0;
                 })
-                
-                FIFA.mothods.endTournament(players[0].address, players[1].address, players[2].address).call();
+                console.log(players[0].address + " " + players[1].address + " " + players[2].address)
+                // FIFA.mothods.endTournament(players[0].address, players[1].address, players[2].address).call();
             })
     }
 

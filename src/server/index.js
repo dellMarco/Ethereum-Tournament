@@ -47,8 +47,8 @@ web3.eth.getAccounts()
         FIFARumble = JSON.parse(content);
         return new web3.eth.Contract(FIFARumble.abi)
             .deploy({
-                data: FIFARumble.bytecode,
-                arguments: web3.eth.getBalance(accounts[0])
+                data: FIFARumble.bytecode
+                // arguments: web3.eth.getBalance(accounts[0])
             })
             .send({
                 from: accounts[0],
