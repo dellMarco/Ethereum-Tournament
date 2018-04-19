@@ -5,25 +5,29 @@ accLoad.then(function () {
     //check Cookie and PW
     FIFA.methods.getTournament().call()
         .then(tournament => {
-            if (tournament[4]) {
-                if (getCookie("address") === web3.eth.defaultAccount) {
-                    console.log("GameMaster")
-                    loadData();
-                } else {
-                    if (prompt("Passwort eingeben") == getPW()) {
-                        loadData();
-                        document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
-                    } else {
-                        //window.location = "../player/index.html";
-                    }
-                }
-            } else if (tournament[5]) {
-                $('#rumble').prop("disabled", true);
-                $('#start').prop("disabled", true);
+            if (tournament[5]) {
+
                 if (confirm("Turnier läuft, zum Spielplan wechseln?")) {
                     window.location = "../gameMaster/gameplan.html";
                 }
+            } else if (tournament[4]) {
+                $('#rumble').prop("disabled", false);
+            } else {
+                $('#start').prop("disabled", false);
             }
+
+            if (getCookie("address") === web3.eth.defaultAccount) {
+                console.log("GameMaster")
+                loadData();
+            } else {
+                if (prompt("Passwort eingeben") == getPW()) {
+                    loadData();
+                    document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
+                } else {
+                    //window.location = "../player/index.html";
+                }
+            }
+
         })
 
     $("#rumble").on("click", function () {
@@ -133,7 +137,7 @@ accLoad.then(function () {
             method: 'POST',
             async: false,
             success: function (res) {
-                
+
             },
             error: console.error,
             data: JSON.stringify({
@@ -169,9 +173,6 @@ accLoad.then(function () {
                     $('#slider2').slider({ value: parsed[3], max: parsed[2] });
                     handle.text($('#slider').slider("value"));
                     handle2.text($('#slider2').slider("value"));
-                    document.getElementById("start").disabled = true;
-                    document.getElementById("rumble").disabled = false;
-
                     document.getElementById("name").disabled = true;
                     document.getElementById("fee").disabled = true;
                     document.getElementById("fee2").disabled = true;
@@ -182,10 +183,8 @@ accLoad.then(function () {
                     } else {
                         $("#tournamentCount").html(parsed[3] + " von " + parsed[2] + " Plätzen belegt!");
                     }
-                } else {
-                    document.getElementById("rumble").disabled = true;
-
                 }
+
             }
             else {
                 console.error(error);

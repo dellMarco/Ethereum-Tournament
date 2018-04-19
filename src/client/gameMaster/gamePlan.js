@@ -15,7 +15,6 @@ accLoad.then(function () {
         }
     });
 
-
     //set header
     FIFA.methods.getPlayer(getCookie("address")).call()
         .then(player => {
@@ -107,11 +106,12 @@ accLoad.then(function () {
         var cell6 = row.insertCell(5);
         var cell7 = row.insertCell(6);
         var cell8 = row.insertCell(7);
-        var a = "contenteditable";
+        var attrEd = "contenteditable";
 
         if (p1 === playerID || p2 === playerID) {
             row.style.backgroundColor = "var(--color-co-yellow)";
         }
+
         cell1.innerHTML = gameNumber;
         cell2.innerHTML = p1
         cell3.innerHTML = p1Name
@@ -119,21 +119,25 @@ accLoad.then(function () {
         cell5.innerHTML = p2Name
 
         if (getCookie("address") == web3.eth.defaultAccount) {
-            cell6.setAttribute(a, 'true');
-            cell7.setAttribute(a, 'true');
+            console.log('true ' + attrEd)
+            cell6.setAttribute(attrEd, 'true');
+            cell7.setAttribute(attrEd, 'true');
         }
 
         if (p1Goals != "") {
             cell6.innerHTML = p1Goals
-            cell6.setAttribute(a, 'false');
+            cell6.setAttribute(attrEd, 'false');
         }
+
         if (p2Goals != "") {
             cell7.innerHTML = p2Goals
-            cell7.setAttribute(a, 'false');
+            cell7.setAttribute(attrEd, 'false');
         }
+
         if (p1Goals > p2Goals) {
             cell8.innerHTML = "Spieler 1"
         }
+
         else if (p2Goals > p1Goals) {
             cell8.innerHTML = "Spieler 2"
         }
@@ -147,9 +151,9 @@ accLoad.then(function () {
             if (p1g < p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
                 if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain ENDGÜLTIG speichern? ")) {
-                    decide(mID, p1ID, p2ID, p2g, p1g)
-                    this.cells[5].setAttribute(a, 'false');
-                    this.cells[6].setAttribute(a, 'false');
+                    decide(mID, p1ID, p2ID, p1g, p2g)
+                    this.cells[5].setAttribute(attrEd, 'false');
+                    this.cells[6].setAttribute(attrEd, 'false');
                     this.cells[7].innerHTML = "Spieler 2"
                 } else {
                     this.cells[5].innerHTML = ""
@@ -160,8 +164,8 @@ accLoad.then(function () {
 
                 if (confirm("Spieler 1 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain ENDGÜLTIG speichern? ")) {
                     decide(mID, p1ID, p2ID, p1g, p2g)
-                    this.cells[5].setAttribute(a, 'false');
-                    this.cells[6].setAttribute(a, 'false');
+                    this.cells[5].setAttribute(attrEd, 'false');
+                    this.cells[6].setAttribute(attrEd, 'false');
                     this.cells[7].innerHTML = "Spieler 1"
                 } else {
                     this.cells[5].innerHTML = ""
@@ -225,24 +229,30 @@ accLoad.then(function () {
     function endT() {
         FIFA.methods.getPlayerCount().call()
             .then(pCount => {
-                var arr = [];
+                var promises = [];
 
-                for (let j = 1; j <= pCount; j++) {
+                for (let j = 0; j < pCount; j++) {
 
-                    FIFA.methods.getPlayerByID(j).call()
+                    var promis = FIFA.methods.getPlayerByID(j + 1).call()
                         .then(p1 => {
-                            arr.push([j, p1[2]])
-                        }
-                        )
-
-
+                            var player = {};
+                            player.id = j + 1;
+                            player.points = p1[2];
+                            player.goals = p1[3];
+                            player.counterGoals = p1[4];
+                            return player;
+                        })
+                    promises.push(promis)
                 }
-                console.log(arr)
-            })
-            .then(() => {
 
+                return Promise.all(promises)
+            })
+
+            .then(players => {
+                console.log(players)
             })
     }
+
 
     $("#end").on("click", function () {
         endT();
