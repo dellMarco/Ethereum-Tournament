@@ -1,8 +1,20 @@
 
 
 accLoad.then(function () {
-
+    setGameMaster();
     //check Cookie and PW
+    if (getCookie("address") === web3.eth.defaultAccount) {
+        console.log("GameMaster")
+        loadData();
+    } else {
+        if (prompt("Passwort eingeben") == getPW()) {
+            loadData();
+            document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
+        } else {
+            window.location = "../player/index.html";
+        }
+    }
+
     FIFA.methods.getTournament().call()
         .then(tournament => {
             if (tournament[5]) {
@@ -14,18 +26,6 @@ accLoad.then(function () {
                 $('#rumble').prop("disabled", false);
             } else {
                 $('#start').prop("disabled", false);
-            }
-
-            if (getCookie("address") === web3.eth.defaultAccount) {
-                console.log("GameMaster")
-                loadData();
-            } else {
-                if (prompt("Passwort eingeben") == getPW()) {
-                    loadData();
-                    document.cookie = "address=" + web3.eth.defaultAccount + ";path=/";
-                } else {
-                    //window.location = "../player/index.html";
-                }
             }
 
         })
@@ -41,15 +41,14 @@ accLoad.then(function () {
                 }
             }))
             .then(() => {
-                alert("todo: location")
-                //window.open("gamePlan.html", '_blank')
+                window.location = "/gamePlan.html"
             })
     });
 
     $("button").addClass("button");
 
     $("#start").on("click", function () {
-        if ($("#name").val() == "" || $("#name").val() == 1 ) {
+        if ($("#name").val() == "") {
             $("#name").effect("shake");
             return;
         }
@@ -70,15 +69,15 @@ accLoad.then(function () {
                 },
                 function (err, res) {
                     if (!err) {
-                        setGameMaster();
+                        location.reload();
                     } else {
                         console.log(err)
                     }
+                }).then(() => {
+                    $('#start').prop("disabled", true); 
                 })
-            .then(() => {
-                location.reload();
-            }
-            )
+
+
     });
 
     $("#reset").on("click", function () {

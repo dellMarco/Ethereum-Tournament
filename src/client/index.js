@@ -29,6 +29,7 @@ function Get(yourUrl) {
 	Httpreq.send(null);
 	return Httpreq.responseText;
 }
+
 const cmcData = JSON.parse(Get('https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=EUR'));
 
 $(document).ready(function () {

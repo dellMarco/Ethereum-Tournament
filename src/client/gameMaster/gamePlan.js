@@ -6,6 +6,14 @@ accLoad.then(function () {
     let playerID;
     let finished;
 
+    FIFA.events.MatchDecided(function (err, res) {
+
+        if (!err) {
+            if (!gameMaster) {location.reload()}
+        } else {
+            console.log(err)
+        }
+    })
 
     FIFA.events.Start(function (err, res) {
 
@@ -26,33 +34,31 @@ accLoad.then(function () {
         let third;
 
         $.ajax({
-            url: '/api/winners',
+            url: '/api/winners/',
             async: false,
             success: function (res) {
 
-                winners = res.winnerID;
+                winners = res;
 
             },
             error: console.error
         });
-
-
         finished = true;
         /*         $("#result").show();
                 for (let i = 0; i < resultP.length; i++) {
                     fillTable2(i + 1, resultP[5], resultP[1], resultP[2], resultP[3], resultP[4])
                 } */
-        console.log(playerID + " " + winner + " " + second + " " + third)
-        if (playerID == winner) {
-            alert("Herzlichen Glückwunsch, du bist der Sieger!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[0], 'ether')));
-        }
-
-        if (playerID == second) {
-            alert("Herzlichen Glückwunsch, du bist Zweiter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[1], 'ether')));
-        }
-
-        if (playerID == third) {
-            alert("Herzlichen Glückwunsch, du bist Dritter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[2], 'ether')));
+        if (playerID == winners[0].winnerID) {
+            alert("Herzlichen Glückwunsch, du bist der Sieger!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[0], 'ether') + " ETH"));
+            location.reload();
+        } else if (playerID == winners[0].secondID) {
+            alert("Herzlichen Glückwunsch, du bist Zweiter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[1], 'ether') + " ETH"));
+            location.reload();
+        } else if (playerID == winners[0].thirdID) {
+            alert("Herzlichen Glückwunsch, du bist Dritter!\n\nDein Preisgeld Beträgt: " + parseFloat(web3.utils.fromWei(res.returnValues[2], 'ether') + " ETH"));
+            location.reload();
+        } else {
+            alert("Das Turnier ist vorbei, leider hast du nichts gewonnen... Viel Glück beim nächsten mal!");
         }
 
     })
@@ -179,11 +185,13 @@ accLoad.then(function () {
         }
 
         row.addEventListener('keyup', function () {
+            
             var p1ID = this.cells[1].innerHTML * 1
             var p1g = parseInt(this.cells[5].innerHTML)
             var p2ID = this.cells[3].innerHTML * 1
             var p2g = parseInt(this.cells[6].innerHTML)
             var mID = this.cells[0].innerHTML * 1
+
             if (p1g < p2g && !(isNaN(p1g)) && !(isNaN(p1g))) {
 
                 if (confirm("Spieler 2 hat gewonnen!\n\nSpielstand für Spiel " + mID + " in der Blockchain ENDGÜLTIG speichern? ")) {
@@ -308,7 +316,7 @@ accLoad.then(function () {
             })
 
             .then(players => {
-                console.log(players);
+
                 players.sort(function (a, b) {
                     if (parseInt(a.points) < parseInt(b.points)) {
                         return 1;
@@ -336,7 +344,9 @@ accLoad.then(function () {
                     }
                     return 0;
                 })
-
+                var wID = players[0].id;
+                var sID = players[1].id;
+                var tID = players[2].id;
                 $.ajax({
                     url: '/api/winners',
                     method: "POST",
@@ -345,9 +355,9 @@ accLoad.then(function () {
                     },
                     error: console.error,
                     data: JSON.stringify({
-                        winnerID: players[0].id,
-                        secondID: players[1].id,
-                        thirdID: players[2].id
+                        winnerID: wID,
+                        secondID: sID,
+                        thirdID: tID
                     }),
                     contentType: 'application/json'
                 })

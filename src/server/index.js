@@ -74,7 +74,6 @@ app.get('/api/contract', (req, res) => {
 });
 
 
-
 const users = [];
 const winners = [];
 
@@ -89,9 +88,7 @@ app.post('/api/users', bodyParser.json(), function (req, res) {
 
 app.post('/api/winners', bodyParser.json(), function (req, res) {
     if (!req.body) return res.sendStatus(400)
-    const w = w[w.length - 1];
-    req.body.id = w ? w.id + 1 : 0;
-    w.push(req.body);
+    winners.push(req.body);
     res.status(201).json(req.body);
 })
 
@@ -120,16 +117,5 @@ app.get('/api/users/:id', (req, res) => {
 
 })
 
-app.get('/api/winners/:id', (req, res) => {
 
-    const uFound = winners.find(u => u.id === parseInt(req.params.id))
-    if (uFound) {
-        res.json(uFound)
-    } else {
-        res.status(404).json({
-            message: "not Found"
-        })
-    }
-
-})
 

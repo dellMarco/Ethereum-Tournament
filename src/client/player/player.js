@@ -8,14 +8,15 @@ accLoad.then(function () {
     $('input').val('');
     if (getCookie("address") === web3.eth.defaultAccount) {
         alert("Der Game Master kann nicht selbst mitspielen!")
-        alert("todo: einkommentieren windows.location")
-        //window.location = "../gameMaster/index.html";
+        window.location = "../gameMaster/index.html";
     }
 
     //check Cookie and PW
     if (getCookie("address") != "") {
-        alert("todo: einkommentieren windows.location")
-        // window.location = "../gameMaster/gamePlan.html"
+        if (!confirm("Neuen Spieler anlegen?")) {
+            window.location = "../gameMaster/gamePlan.html"
+        }
+        
     }
 
     /*    FIFA.events.newRegister(newCount => {
@@ -97,9 +98,8 @@ accLoad.then(function () {
             })
             .then(() => {
                 document.cookie = "address=" + allAccounts[count] + ";path=/";
-                alert("todo: location einkommentieren")
-                // window.location = "../gameMaster/gamePlan.html"
-                console.log(" " + name + " registriert")
+                window.location = "../gameMaster/gamePlan.html"
+                
             })
 
     }

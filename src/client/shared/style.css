@@ -67,6 +67,9 @@ th {
   border: 1px solid black;
 }
 
+table tr {
+  white-space: nowrap;
+}
 table tr:hover{
   background-color: var(--color-co-yellow);
 }

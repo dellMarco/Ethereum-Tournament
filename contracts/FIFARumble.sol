@@ -37,7 +37,7 @@ contract FIFARumble {
        
     event newRegister();
     event Start(); 
-    event MatchDecided(Encounter);
+    event MatchDecided();
     event End(uint, uint, uint);
    
      ////modifiers////
@@ -156,6 +156,7 @@ contract FIFARumble {
                 setPoints(p1, 0, _p1Goals, _p2Goals);
             }
         }
+        emit MatchDecided();
     }
 
     ////player functions////
