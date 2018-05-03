@@ -1,8 +1,7 @@
 
 
 accLoad.then(function () {
-   
-    let inital = true;
+
     loadT();
 
     $('input').val('');
@@ -16,7 +15,7 @@ accLoad.then(function () {
         if (!confirm("Neuen Spieler anlegen?")) {
             window.location = "../gameMaster/gamePlan.html"
         }
-        
+
     }
 
     /*    FIFA.events.newRegister(newCount => {
@@ -36,9 +35,8 @@ accLoad.then(function () {
                 if (result[0] != "") {
                     document.getElementById("opener").disabled = false;
                     fee = result[1];
-                    inital ? rotate() : null;
                     $("#tournament").html(result[0]);
-
+                    rotate()
                     if (parseInt(result[3]) === parseInt(result[2])) {
                         $("#tournamentCount").html("Alle " + result[2] + " Plätze sind belegt!");
                         document.getElementById("opener").disabled = true;
@@ -46,6 +44,7 @@ accLoad.then(function () {
                         $("#tournamentCount").html(result[3] + " von " + result[2] + " Plätzen belegt!");
                     }
                 } else {
+
                     document.getElementById("opener").disabled = true;
                     $("#tournament").html("KEIN TURNIER GESTARTET!");
                     $("#tournamentCount").html("Bitte wende dich an den Game Master.");
@@ -55,7 +54,6 @@ accLoad.then(function () {
             else
                 console.error(error);
         });
-        inital = false;
     }
 
     $("#opener").on("click", function () {
@@ -99,82 +97,84 @@ accLoad.then(function () {
             .then(() => {
                 document.cookie = "address=" + allAccounts[count] + ";path=/";
                 window.location = "../gameMaster/gamePlan.html"
-                
+
             })
 
     }
 
     /* Rotate Text stuff */
     function rotate() {
-        const TxtRotate = function (el, prices, period) {
+        
+            const TxtRotate = function (el, prices, period) {
 
-            for (let index = 0; index < 4; index++) {
-                switch (index) {
-                    case 0:
-                        prices[0] = (fee / 1000000000000000000 * cmcData[0].price_eur).toFixed(2) + " €.";
-                        break;
-                    case 1:
-                        prices.push((fee / 1000000000000000000 * cmcData[0].price_usd).toFixed(2) + " $.");
-                        break;
-                    case 2:
-                        prices.push((fee / 1000000000000000000).toFixed(2) + " ETH.");
-                        break;
-                    case 3:
-                        prices.push(fee + " Wei.");
-                        break;
-                    default:
+                for (let index = 0; index < 4; index++) {
+                    switch (index) {
+                        case 0:
+                            prices[0] = (fee / 1000000000000000000 * cmcData[0].price_eur).toFixed(2) + " €.";
+                            break;
+                        case 1:
+                            prices.push((fee / 1000000000000000000 * cmcData[0].price_usd).toFixed(2) + " $.");
+                            break;
+                        case 2:
+                            prices.push((fee / 1000000000000000000).toFixed(2) + " ETH.");
+                            break;
+                        case 3:
+                            prices.push(fee + " Wei.");
+                            break;
+                        default:
 
+                    }
+                }
+                this.prices = prices;
+                this.el = el;
+                this.loopNum = 0;
+                this.period = parseInt(period, 10) || 1500;
+                this.txt = '';
+                this.tick();
+                this.isDeleting = false;
+            };
+
+            TxtRotate.prototype.tick = function () {
+                var i = this.loopNum % this.prices.length;
+                var fullTxt = this.prices[i];
+
+                if (this.isDeleting) {
+                    this.txt = fullTxt.substring(0, this.txt.length - 1);
+                } else {
+                    this.txt = fullTxt.substring(0, this.txt.length + 1);
+                }
+
+                this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+                var that = this;
+                var delta = 300 - Math.random() * 100;
+
+                if (this.isDeleting) { delta /= 2; }
+
+                if (!this.isDeleting && this.txt === fullTxt) {
+                    delta = this.period;
+                    this.isDeleting = true;
+                } else if (this.isDeleting && this.txt === '') {
+                    this.isDeleting = false;
+                    this.loopNum++;
+                    delta = 500;
+                }
+
+                setTimeout(function () {
+                    that.tick();
+                }, delta);
+            };
+
+            var elements = document.getElementsByClassName('txt-rotate');
+            for (var i = 0; i < elements.length; i++) {
+                var prices = elements[i].getAttribute('data-rotate');
+                var period = elements[i].getAttribute('data-period');
+                if (prices) {
+                    new TxtRotate(elements[i], JSON.parse(prices), period);
                 }
             }
-            this.prices = prices;
-            this.el = el;
-            this.loopNum = 0;
-            this.period = parseInt(period, 10) || 1500;
-            this.txt = '';
-            this.tick();
-            this.isDeleting = false;
-        };
-
-        TxtRotate.prototype.tick = function () {
-            var i = this.loopNum % this.prices.length;
-            var fullTxt = this.prices[i];
-
-            if (this.isDeleting) {
-                this.txt = fullTxt.substring(0, this.txt.length - 1);
-            } else {
-                this.txt = fullTxt.substring(0, this.txt.length + 1);
-            }
-
-            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
-
-            var that = this;
-            var delta = 300 - Math.random() * 100;
-
-            if (this.isDeleting) { delta /= 2; }
-
-            if (!this.isDeleting && this.txt === fullTxt) {
-                delta = this.period;
-                this.isDeleting = true;
-            } else if (this.isDeleting && this.txt === '') {
-                this.isDeleting = false;
-                this.loopNum++;
-                delta = 500;
-            }
-
-            setTimeout(function () {
-                that.tick();
-            }, delta);
-        };
-
-        var elements = document.getElementsByClassName('txt-rotate');
-        for (var i = 0; i < elements.length; i++) {
-            var prices = elements[i].getAttribute('data-rotate');
-            var period = elements[i].getAttribute('data-period');
-            if (prices) {
-                new TxtRotate(elements[i], JSON.parse(prices), period);
-            }
         }
-    }
+    
     /* End Rotate Text stuff */
 });
 
