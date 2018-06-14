@@ -14,7 +14,8 @@
     "npm": "^5.8.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "web3": "^1.0.0-beta.33"
+    "web3": "^1.0.0-beta.33",
+    "postinstall":"typechain"
   },
   "devDependencies": {},
   "scripts": {
